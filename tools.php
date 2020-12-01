@@ -1,5 +1,4 @@
 <?php
-
     function get($command) {
 
         $value = "";
@@ -17,6 +16,19 @@
 
     function userIsLoggedIn() {
         return isset($_SESSION["user_id"]);
+    }
+
+    function logUserIn($id, $username) {
+        include("./connect_to_db.php");
+
+        $_SESSION["user_id"] = $id;
+        $_SESSION["username"] = $username;
+
+        $command = "UPDATE users SET last_login = current_timestamp() WHERE id = ?";
+        $statement = $dbh->prepare($command);
+        $was_successful = $statement->execute([$id]);
+
+        var_dump($statement);
     }
 
 ?>
