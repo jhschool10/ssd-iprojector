@@ -27,8 +27,6 @@
         $command = "UPDATE users SET last_login = current_timestamp() WHERE id = ?";
         $statement = $dbh->prepare($command);
         $was_successful = $statement->execute([$id]);
-
-        var_dump($statement);
     }
 
 ?>
