@@ -2,8 +2,6 @@ document.forms[0].addEventListener("submit", function(event) {
     event.preventDefault();
 
     const thought_text = document.getElementById("thought_text").value;
-
-    console.log("Here");
     recordThought(thought_text);
 });
 
