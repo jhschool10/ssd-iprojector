@@ -36,8 +36,7 @@
                 $user_info = $statement->fetch();
 
                 if ($user_password == $user_info["pass"]) {
-                    $_SESSION["user_id"] = $user_info["id"];
-                    $_SESSION["username"] = $username;
+                    logUserIn($user_info["id"], $username);
                 }
             }
         }
