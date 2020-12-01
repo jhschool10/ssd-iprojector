@@ -87,7 +87,7 @@
                         echo        "<div class='form-message'></div>";
                         echo    "</div>";
                         echo    "<div class='form-chunk'>";
-                        echo        "<input type='submit' value='Submit' id='btn-submit'>";
+                        echo        "<input type='submit' value='Submit'>";
                         echo    "</div>";
                         echo "</form>";
                     }
