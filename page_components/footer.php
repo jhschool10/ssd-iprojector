@@ -8,6 +8,7 @@
                 } else {
                     echo "Please log in.";
                 }
+                echo "<br>Copyright forever.";
     echo    "</div>";
 
     echo "</footer>";

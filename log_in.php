@@ -4,6 +4,8 @@
 
     session_start();
 
+    $last_login = "";
+
     $formWasSubmitted = count($_POST) != 0;
     if (!userIsLoggedIn() && $formWasSubmitted) {
 
@@ -28,7 +30,7 @@
 
         $user_logged_in = false;
         if ($usernameIsValid and $passwordIsValid) {
-            $command = "SELECT id, pass FROM users WHERE username = ?";
+            $command = "SELECT id, pass, last_login FROM users WHERE username = ?";
             $statement = $dbh->prepare($command);
             $was_successful = $statement->execute([$username]);
 
@@ -37,6 +39,7 @@
 
                 if ($user_password == $user_info["pass"]) {
                     logUserIn($user_info["id"], $username);
+                    $last_login = "You last logged in: " . $user_info["last_login"];
                 }
             }
         }
@@ -49,52 +52,59 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./css/main.css">
+        <link rel="stylesheet" href="./css/log_in_log_out.css">
         <style>
-
+            section:last-of-type {
+                background-image: url("./images/infinity_mirror.jpg");
+            }
         </style>
     </head>
     <body>
-        <?php
-            include("./page_components/header.php");
-            include("./page_components/nav.php");
-        ?>
-        <main>
-            <h2>Log in</h2>
+        <div class="container">
             <?php
-
-                if ($formWasSubmitted and !userIsLoggedIn()) {
-                    echo "<div class='message-error'>";
-                        echo "Invalid user info.";
-                    session_destroy();
-                    $_SESSION = [];
-                    echo "</div>";
-                } else {
-                    if (userIsLoggedIn()) {
-                        echo "<p>";
-                            echo "You are already logged in.";
-                        echo "</p>";
-                    } else {
-                        echo "<form method='POST' action='log_in.php'>";
-                        echo    "<div class='form-chunk'>";
-                        echo        "<label for='username'>Username:</label>";
-                        echo        "<input type='text' name='username' required>";
-                        echo        "<div class='form-message'></div>";
-                        echo    "</div>";
-                        echo    "<div class='form-chunk'>";
-                        echo        "<label for='user_password'>Password:</label>";
-                        echo        "<input type='password' name='user_password' required>";
-                        echo        "<div class='form-message'></div>";
-                        echo    "</div>";
-                        echo    "<div class='form-chunk'>";
-                        echo        "<input type='submit' value='Submit'>";
-                        echo    "</div>";
-                        echo "</form>";
-                    }
-                }
+                include("./page_components/header.php");
+                include("./page_components/nav.php");
             ?>
-        </main>
-        <?php
-            include("./page_components/footer.php");
-        ?>
+            <main>
+                <h2>Log in</h2>
+                <section>
+                    <?php
+                        if ($formWasSubmitted and !userIsLoggedIn()) {
+                            echo "<div class='message-error'>";
+                                echo "Incorrect user information.";
+                            echo "</div>";
+                            session_destroy();
+                            $_SESSION = [];
+                        } else {
+                            if (userIsLoggedIn()) {
+                                echo "<p>";
+                                    echo "Welcome.<br>" . $last_login;
+                                echo "</p>";
+                            } else {
+                                echo "<form method='POST' action='log_in.php'>";
+                                echo    "<div class='form-chunk'>";
+                                echo        "<label for='username'>Username:</label>";
+                                echo        "<input type='text' name='username' required>";
+                                echo    "</div>";
+                                echo    "<div class='form-chunk'>";
+                                echo        "<label for='user_password'>Password:</label>";
+                                echo        "<input type='password' name='user_password' required>";
+                                echo    "</div>";
+                                echo    "<div class='form-chunk'>";
+                                echo        "<input type='submit' value='Submit'>";
+                                echo    "</div>";
+                                echo "</form>";
+                            }
+                        }
+                    ?>
+                </section>
+                <section>
+                    <p>(Credit: https://commons.wikimedia.org/wiki/File:Infinity_Mirror_Effect.jpg)</p>
+                </section>
+            </main>
+            <?php
+                include("./page_components/footer.php");
+            ?>
+        </div>
     </body>
 </html>

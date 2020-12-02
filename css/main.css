@@ -1,6 +1,6 @@
 :root {
     /* VARS */
-    --main-width: 600px;
+    --main-width: 700px;
     --colour-pink: 255, 218, 218;
     --colour-cyan: 219, 246, 233;
     --colour-light-blue: 157, 223, 211;
@@ -12,83 +12,93 @@
     box-sizing: border-box;
 }
 body {
+    width: 100%;
     padding: 1em;
 
     font-family: Arial, Helvetica, sans-serif;
-    font-size: small;
+    font-size: small;    
+
+    display: grid;
+    justify-content: center;
+}
+div.container {
+    display: grid;
+    grid-template-columns: calc(var(--main-width) * 0.22) calc(var(--main-width) * 0.78);
+
+    border-radius: 1em;
+    box-shadow: 3px 3px 2px 1px rgba(0, 0, 0, 0.5);
 }
 header {
-    width: var(--main-width);
+    width: 100%;
     padding: 1em;
 
-    border: 1px solid black;
+    border-top-right-radius: 1em;
+    border-top-left-radius: 1em;
     background-color: rgba(0, 0, 0, 0.6);
 }
-    header > h1 {
+    header > h1 > a {
+        width: 100%;
+        padding: 1em 0 1em 0;
+
         text-align: center;
         color: white;
     }
 nav {
-    margin: 0.5em 0 0.5em 0;
-    width: var(--main-width);
+    align-self: end;
+    width: 100%;
 
     display: inline-flex;
-    justify-content: space-between;
 }
-    nav a {
-        padding: 0.5em 1em 0.5em 1em;
+    a.button {
+        padding: 1em 1em 0.5em 1em;
+        margin-left: 1em;
 
-        background-color: rgba(0, 0, 0, 0.3);
+        border-top-right-radius: 1em;
+        border-top-left-radius: 1em;
 
         text-align: center;
         color: black;
     }
-    nav a:hover {
-        background-color: rgba(0, 0, 0, 0.1);
+    a.button:hover {
+        padding-bottom: 1em;
     }
-    nav a:active {
+    a.button:active {
         color: rgba(0, 0, 0, 0.5);
     }
+    a.button:nth-of-type(1) {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    a.button:nth-of-type(2) {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    a.button:nth-of-type(3) {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+    a.button:nth-of-type(4) {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    a.button:nth-of-type(5) {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 main {
-    padding: 1em;
+    grid-column: 1 / span 2;
+
     width: var(--main-width);
 
     background-color: rgba(0, 0, 0, 0.1);
 }
     main > h2 {
-        margin-bottom: 0.5em;
-    }
-    main > section {
-        margin-bottom: 1em;
-    }
-    .form-chunk {
         margin: 0.5em;
-        
-        display: grid;
-        grid-template-columns: 25% 30% 45%;
     }
-        .form-chunk > * {
-            margin: 0.5em;
-        }
-            label {
-                text-align: right;
-            }
-        .form-message {
-
-        }
-        #btn-submit {
-            grid-column: 1 / span 3;
-        }
-    .message-error {
-        color: red;
-    }
-    .message-success {
-        color: green;
-    }
+    
 footer {
     width: var(--main-width);
-    margin-top: 0.5em;
     padding: 1em;
 
+    border-bottom-right-radius: 1em;
+    border-bottom-left-radius: 1em;
     background-color: rgba(0, 0, 0, 0.6);
+
+    text-align: center;
+    color: white;
 }
