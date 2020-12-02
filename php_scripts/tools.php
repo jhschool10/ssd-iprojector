@@ -19,7 +19,7 @@
     }
 
     function logUserIn($id, $username) {
-        include("./connect_to_db.php");
+        include("./php_scripts/connect_to_db.php");
 
         $_SESSION["user_id"] = $id;
         $_SESSION["username"] = $username;

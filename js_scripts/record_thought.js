@@ -6,7 +6,7 @@ document.forms[0].addEventListener("submit", function(event) {
 });
 
 function recordThought(text) {
-    fetch("./record_thought_to_db.php?thought_text=" + text)
+    fetch("./php_scripts/record_thought_to_db.php?thought_text=" + text)
         .then(response => response.json())
         .then(result => {
             if (result.success) {

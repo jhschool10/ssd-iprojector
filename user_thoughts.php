@@ -1,6 +1,6 @@
 <?php
-    include("./connect_to_db.php");
-    include("./tools.php");
+    include("./php_scripts/connect_to_db.php");
+    include("./php_scripts/tools.php");
 
     session_start();
 ?>
@@ -31,7 +31,7 @@
 
         <?php
             if (userIsLoggedIn()) {
-                echo "<script src='./user_thoughts.js'></script>";
+                echo "<script src='./js_scripts/user_thoughts.js'></script>";
             }
         ?>
     </body>

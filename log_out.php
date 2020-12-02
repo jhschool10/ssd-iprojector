@@ -1,5 +1,5 @@
 <?php
-    include("./tools.php");
+    include("./php_scripts/tools.php");
 
     session_start();
 ?>

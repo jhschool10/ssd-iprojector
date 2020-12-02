@@ -1,6 +1,6 @@
 <?php
-    include("./connect_to_db.php");
-    include("./tools.php");
+    include("./php_scripts/connect_to_db.php");
+    include("./php_scripts/tools.php");
 
     session_start();
 

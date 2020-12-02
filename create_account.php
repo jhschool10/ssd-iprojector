@@ -1,6 +1,6 @@
 <?php
-    include("./tools.php");
-    include("./connect_to_db.php");
+    include("./php_scripts/tools.php");
+    include("./php_scripts/connect_to_db.php");
 
     session_start();
     $formWasSubmitted = count($_POST) != 0;
