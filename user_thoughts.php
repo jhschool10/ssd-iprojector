@@ -15,8 +15,12 @@
         </style>
     </head>
     <body>
+        <?php
+            include("./page_components/header.php");
+            include("./page_components/nav.php");
+        ?>
         <main>
-            <h1>Thought List</h1>
+            <h2>Thought List</h2>
             <?php
                 if (!userIsLoggedIn()) {
                     echo "<p>You need to be logged in.</p>";
@@ -33,6 +37,9 @@
             if (userIsLoggedIn()) {
                 echo "<script src='./js_scripts/user_thoughts.js'></script>";
             }
+        ?>
+        <?php
+            include("./page_components/footer.php");
         ?>
     </body>
 </html>

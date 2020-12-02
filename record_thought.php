@@ -15,8 +15,12 @@
         </style>
     </head>
     <body>
+        <?php
+            include("./page_components/header.php");
+            include("./page_components/nav.php");
+        ?>
         <main>
-            <h1>Record a Thought</h1>
+            <h2>Record a Thought</h2>
             <div id="success_message"></div>
             <?php
                 if (!userIsLoggedIn()) {
@@ -43,6 +47,9 @@
             if (userIsLoggedIn()) {
                 echo "<script src='./js_scripts/record_thought.js'></script>";
             }
+        ?>
+                <?php
+            include("./page_components/footer.php");
         ?>
     </body>
 </html>

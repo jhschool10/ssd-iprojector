@@ -15,8 +15,12 @@
         </style>
     </head>
     <body>
+        <?php
+            include("./page_components/header.php");
+            include("./page_components/nav.php");
+        ?>
         <main>
-            <h1>Goodbye</h1>
+            <h2>Goodbye</h2>
             <div>
                 <?php
                     if (userIsLoggedIn()) {
@@ -34,5 +38,8 @@
                 ?>
             </div>
         </main>
+        <?php
+            include("./page_components/footer.php");
+        ?>
     </body>
 </html>

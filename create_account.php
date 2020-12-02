@@ -61,13 +61,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./css/main.css">
-        <style>
-
-        </style>
     </head>
     <body>
+        <?php
+            include("./page_components/header.php");
+            include("./page_components/nav.php");
+        ?>
         <main>
-            <h1>Create an account</h1>
+            <h2>Create an account</h2>
             <?php
                 if (userIsLoggedIn()) {
                     echo "<p>";
@@ -130,7 +131,7 @@
                 <div class="form-chunk">
                     <?php
                         if (userIsLoggedIn()) {
-                            echo "<input type='submit' value='Please log out to create an account.' id='btn-submit' disabled>";
+                            echo "<input type='submit' value='Please log out to create a new account.' id='btn-submit' disabled>";
                         } else {
                             echo "<input type='submit' value='Submit' id='btn-submit'>";
                         }
@@ -138,5 +139,8 @@
                 </div>
             </form>
         </main>
+        <?php
+            include("./page_components/footer.php");
+        ?>
     </body>
 </html>

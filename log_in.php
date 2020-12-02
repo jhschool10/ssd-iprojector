@@ -54,25 +54,25 @@
         </style>
     </head>
     <body>
+        <?php
+            include("./page_components/header.php");
+            include("./page_components/nav.php");
+        ?>
         <main>
-            <h1>Log in</h1>
+            <h2>Log in</h2>
             <?php
 
-                if ($formWasSubmitted) {
-                    if (userIsLoggedIn()) {
-                        echo "<div class='message-success'>";
-                            echo "Hello " . get("username") . ". You are logged in.";
-                            var_dump($_SESSION);
-                    } else {
-                        echo "<div class='message-error'>";
-                            echo "Invalid user info.";
-                        session_destroy();
-                        $_SESSION = [];
-                    }
-                echo "</div>";
+                if ($formWasSubmitted and !userIsLoggedIn()) {
+                    echo "<div class='message-error'>";
+                        echo "Invalid user info.";
+                    session_destroy();
+                    $_SESSION = [];
+                    echo "</div>";
                 } else {
                     if (userIsLoggedIn()) {
-                        echo "You're already logged in.";
+                        echo "<p>";
+                            echo "You are already logged in.";
+                        echo "</p>";
                     } else {
                         echo "<form method='POST' action='log_in.php'>";
                         echo    "<div class='form-chunk'>";
@@ -93,5 +93,8 @@
                 }
             ?>
         </main>
+        <?php
+            include("./page_components/footer.php");
+        ?>
     </body>
 </html>
