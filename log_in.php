@@ -51,60 +51,106 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./css/main.css">
-        <link rel="stylesheet" href="./css/log_in_log_out.css">
+        <link rel="stylesheet" href="./css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./css/animate.min.css"/>
         <style>
-            section:last-of-type {
-                background-image: url("./images/infinity_mirror.jpg");
+            @media screen and (min-width: 768px) { /* md and above */
+                    .jh-height {
+                        height: 90vh;
+                    }
+                }
+            @media screen and (max-width: 767px) { /* sm and below */
+                .jh-height {
+                    height: 45vh;
+                }
             }
+            .jh-height-header {
+                height: 10vh;
+            }
+            #head_image {
+                background-image: url("./images/head.png");
+                background-size: 80% auto;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+                #head_image:hover {
+                    background-image: url("./images/head_open.png");
+                }
+            #globe_image {
+                background-image: url("./images/globe.png");
+                background-size: 80% auto;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+                #globe_image:hover {
+                    background-image: url("./images/globe_open.png");
+                }
+            #mirror_image {
+                background-image: url("./images/infinity_mirror_02.jpg");
+                /* background-size: 100%; */
+                background-position: center;
+                background-repeat: no-repeat;
+
+                opacity: 0.5;
+                transition: opacity 1s ease-in;
+            }
+                #mirror_image:hover {
+                    opacity: 1;
+                }
         </style>
     </head>
-    <body>
-        <div class="container">
-            <?php
+    <body class='bg-light'>
+        <div class="container-fluid jh-height p-0 m-0">
+            <?php // Header and Nav
                 include("./page_components/header.php");
-                include("./page_components/nav.php");
             ?>
-            <main>
-                <h2>Log in</h2>
-                <section>
+            <div class="row jh-height justify-content-center align-items-center p-4 m-0">
+                <section class="col-md h-100 mt-3">
                     <?php
-                        if ($formWasSubmitted and !userIsLoggedIn()) {
-                            echo "<div class='message-error'>";
-                                echo "Incorrect user information.";
-                            echo "</div>";
-                            session_destroy();
-                            $_SESSION = [];
+                        if (userIsLoggedIn()) { // Successful login
+                            // LANDING PAGE
+                            echo    "<div class='h-100 w-100 bg-light border rounded shadow' id='head_image'>";
+                            echo        "<a href='./user_thoughts.php' class='d-inline-block w-100 h-100 pt-5 pl-5'><span class='border border p-2 rounded bg-primary text-white'>My thoughts</span></a>";
+                            echo    "</div>";
                         } else {
-                            if (userIsLoggedIn()) {
-                                echo "<p>";
-                                    echo "Welcome.<br>" . $last_login;
-                                echo "</p>";
-                            } else {
-                                echo "<form method='POST' action='log_in.php'>";
-                                echo    "<div class='form-chunk'>";
-                                echo        "<label for='username'>Username:</label>";
-                                echo        "<input type='text' name='username' required>";
-                                echo    "</div>";
-                                echo    "<div class='form-chunk'>";
-                                echo        "<label for='user_password'>Password:</label>";
-                                echo        "<input type='password' name='user_password' required>";
-                                echo    "</div>";
-                                echo    "<div class='form-chunk'>";
-                                echo        "<input type='submit' value='Submit'>";
-                                echo    "</div>";
-                                echo "</form>";
-                            }
+                            echo "<form method='POST' action='log_in.php' class='h-100 w-100 d-flex flex-column justify-content-center align-items-center p-4 bg-light border rounded shadow'>";
+                                echo "<div class='row w-50'>";
+                                    echo "<label for='username' class='col text-center mb-0'>Username:</label>";
+                                    echo "<input type='text' name='username' class='col mb-2' required>";
+                                echo "</div>";
+                                echo "<div class='row w-50'>";
+                                    echo "<label for='user_password' class='col text-center mb-0'>Password:</label>";
+                                    echo "<input type='password' name='user_password' class='col mb-4' required>";
+                                echo "</div>";
+                                echo "<div class='row w-50'>";
+                                    echo "<input type='submit' value='Submit' class='col'>";
+                                echo "</div>";
+                                if ($formWasSubmitted) { // Unsuccessful login
+                                    echo "<div class='text-danger'>";
+                                        echo "(Invalid user information)";
+                                    echo "</div>";
+                                    session_destroy();
+                                    $_SESSION = [];
+                                }
+                            echo "</form>";
                         }
                     ?>
                 </section>
-                <section>
-                    <p>(Credit: https://commons.wikimedia.org/wiki/File:Infinity_Mirror_Effect.jpg)</p>
+                <section class="col-md h-100 mt-3">
+                    <?php
+                        if (userIsLoggedIn()) {
+                            echo "<div class='h-100 w-100 bg-light border rounded shadow' id='globe_image'>";
+                                echo "<a href='./all_thoughts.php' class='d-inline-block w-100 h-100 pt-5 pl-5'>";
+                                    echo "<span class='border border p-2 rounded bg-primary text-white'>Other thoughts</span>";
+                                echo "</a>";
+                            echo "</div>";
+                        } else {
+                            echo "<div class='h-100 w-100 bg-light rounded shadow' id='mirror_image'>";
+                            echo "</div>";
+                        }
+                    ?>
                 </section>
-            </main>
-            <?php
-                include("./page_components/footer.php");
-            ?>
+            </div>
         </div>
     </body>
 </html>

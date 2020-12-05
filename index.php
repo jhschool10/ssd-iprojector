@@ -7,7 +7,8 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="./css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./css/animate.min.css"/>
         <style>
             html, body {
                 height: 100%;
@@ -57,13 +58,13 @@
         </style>
     </head>
     <body>
-        <div class="container-fluid jh-height" id="container">
+        <div class="container-fluid jh-height animate__animated animate__fadeIn animate__delay-1s" id="container">
             <div class="row">
-                <div class="col-lg jh-height bg-primary" id="image">
+                <div class="col-lg jh-height bg-primary p-0 m-0" id="image">
                 </div>
                 <div class="col-lg jh-height row justify-content-center align-items-center p-0 m-0" id="content">
                     <div class="">
-                        <h1 class="font-weight-bold">iProjector</h1>
+                        <h1 class="font-weight-bold ">iProjector</h1>
                         <h2>a new way to look at yourself</h2>
                         <p>Record your thoughts.</p>
                         <p>See other peoples' thoughts.</p>

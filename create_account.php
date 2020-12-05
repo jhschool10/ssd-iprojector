@@ -60,117 +60,107 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./css/main.css">
+        <link rel="stylesheet" href="./css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./css/animate.min.css"/>
         <style>
-            .form-chunk {
-                margin: 0.5em;
-                
-                display: grid;
-                grid-template-columns: 25% 30% 45%;
+            @media screen and (min-width: 768px) { /* md and above */
+                    .jh-height {
+                        height: 90vh;
+                    }
+                }
+            @media screen and (max-width: 767px) { /* sm and below */
+                .jh-height {
+                    height: auto;
+                }
             }
-                .form-chunk > * {
-                    margin: 0.5em;
-                }
-                .form-chunk > input {
-                }
-                .form-chunk > label {
-                    text-align: right;
-                }
-                .form-message {
-
-                }
-                #btn-submit {
-                    grid-column: 2 / span 1;
-                }
-            .message-error {
-                color: red;
-            }
-            .message-success {
-                color: green;
+            .jh-height-header {
+                height: 10vh;
             }
         </style>
     </head>
-    <body>
-        <div class="container">
+    <body class='bg-light'>
+        <div class="container-fluid jh-height p-0 m-0">
             <?php
                 include("./page_components/header.php");
-                include("./page_components/nav.php");
             ?>
-            <main>
-                <h2>Create an account</h2>
-                <?php
-                    if (userIsLoggedIn()) {
-                        echo "<p>";
-                        echo    "Hello " . get("username");
-                        echo "</p>";
-                    } else if ($formWasSubmitted) {
-                        if ($usernameIsValid and $passwordIsValid and $ageIsValid) {
-                            if ($db_call_successful) {
-                                echo "<div class='message-success'>";
-                                    echo "Account created. Please log in.";
-                            } else {
-                                echo "<div class='message-error'>";
-                                    echo "Error creating account. Please refresh and try again.";
-                            }
-                        } else {
-                            echo "<div class='message-error'>";
-                                if (!$usernameIsValid) echo "Invalid username.";
-                                if (!$passwordIsValid) echo "Invalid password.";
-                                if (!$ageIsValid) echo "Invalid age. You must be at least 13.";
-                        }
-                        echo "</div>";
-                    }
-                ?>
-                <form method="POST" action="create_account.php">
-                    <div class="form-chunk">
-                        <label for="username">Username:</label>
-                        <input type="text" name="username" required>
-                        <div class="form-message">(Must be at least five digits; numbers and letters only)</div>
-                    </div>
-                    <div class="form-chunk">
-                        <label for="user_password">Password:</label>
-                        <input type="password" name="user_password" required>
-                        <div class="form-message">(Must be at least 8 characters)</div>
-                    </div>
-                    <div class="form-chunk">
-                        <label for="user_password_confirm">Confirm password:</label>
-                        <input type="password" name="user_password_confirm" required>
-                        <div class="form-message"></div>
-                    </div>
-                    <div class="form-chunk">
-                        <label for="user_email">Email:</label>
-                        <input type="email" name="user_email">
-                        <div class="form-message"></div>
-                    </div>
-                    <div class="form-chunk">
-                        <label for="user_firstname">First name:</label>
-                        <input type="text" name="user_firstname">
-                        <div class="form-message"></div>
-                    </div>
-                    <div class="form-chunk">
-                        <label for="user_lastname">Last name:</label>
-                        <input type="text" name="user_lastname">
-                        <div class="form-message"></div>
-                    </div>
-                    <div class="form-chunk">
-                        <label for="user_age">Age</label>
-                        <input type="number" name="user_age" required>
-                        <div class="form-message">(You must be over 13)</div>
-                    </div>
-                    <div class="form-chunk">
+            <div class="jh-height justify-content-center align-items-center p-4 m-0">
+                <div class='h-100 w-100 bg-light border rounded shadow p-4' id='content_box'>
+                    <h2 class="d-flex w-100 justify-content-center text-center pb-3">Create an account</h2>
+                    <div class="row justify-content-center">
                         <?php
                             if (userIsLoggedIn()) {
-                                echo "<input type='submit' value='Please log out to create a new account.' id='btn-submit' disabled>";
-                            } else {
-                                echo "<input type='submit' value='Submit' id='btn-submit'>";
+                                echo "<p>";
+                                echo    "Hello " . get("username");
+                                echo "</p>";
+                            } else if ($formWasSubmitted) {
+                                if ($usernameIsValid and $passwordIsValid and $ageIsValid) {
+                                    if ($db_call_successful) {
+                                        echo "<div class='text-success pb-4'>";
+                                            echo "Account created. Please log in.";
+                                    } else {
+                                        echo "<div class='text-danger pb-4'>";
+                                            echo "Error creating account. Please try a new username.";
+                                    }
+                                } else {
+                                    echo "<div class='text-danger pb-4'>";
+                                        if (!$usernameIsValid) echo "Invalid username.";
+                                        if (!$passwordIsValid) echo "Invalid password.";
+                                        if (!$ageIsValid) echo "Invalid age. You must be at least 13.";
+                                }
+                                echo "</div>";
                             }
                         ?>
+                        <form method="POST" action="create_account.php" class="d-flex justify-content-center flex-column">
+                            <div class="row pb-3 justify-content-center">
+                                <label for="username" class="col-sm-3 text-md-left text-center">Username:</label>
+                                <input type="text" name="username" class="col-5" required>
+                                <div class="text-info col-md text-md-left text-center">(Must be at least five digits; numbers and letters only)</div>
+                            </div>
+                            <div class="row pb-3 justify-content-center">
+                                <label for="user_password" class="col-sm-3 text-md-left text-center">Password:</label>
+                                <input type="password" name="user_password" class="col-5" required>
+                                <div class="text-info col-md text-md-left text-center">(Must be at least 8 characters)</div>
+                            </div>
+                            <div class="row pb-3 justify-content-center">
+                                <label for="user_password_confirm" class="col-sm-3 text-md-left text-center">Confirm password:</label>
+                                <input type="password" name="user_password_confirm" class="col-5" required>
+                                <div class="text-info col-md text-md-left text-center"></div>
+                            </div>
+                            <div class="row pb-3 justify-content-center">
+                                <label for="user_email" class="col-sm-3 text-md-left text-center">Email:</label>
+                                <input type="email" name="user_email" class="col-5">
+                                <div class="text-info col-md text-md-left text-center"></div>
+                            </div>
+                            <div class="row pb-3 justify-content-center">
+                                <label for="user_firstname" class="col-sm-3 text-md-left text-center">First name:</label>
+                                <input type="text" name="user_firstname" class="col-5">
+                                <div class="text-info col-md text-md-left text-center"></div>
+                            </div>
+                            <div class="row pb-3 justify-content-center">
+                                <label for="user_lastname" class="col-sm-3 text-md-left text-center">Last name:</label>
+                                <input type="text" name="user_lastname" class="col-5">
+                                <div class="text-info col-md text-md-left text-center"></div>
+                            </div>
+                            <div class="row pb-3 justify-content-center">
+                                <label for="user_age" class="col-sm-3 text-md-left text-center">Age</label>
+                                <input type="number" name="user_age" class="col-5" required>
+                                <div class="text-info col-md text-md-left text-center">(You must be over 13)</div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-3"></div>
+                                <?php
+                                    if (userIsLoggedIn()) {
+                                        echo "<input type='submit' value='Please log out to create a new account.' id='btn-submit' class='col-5' disabled>";
+                                    } else {
+                                        echo "<input type='submit' value='Submit' id='btn-submit' class='col-5'>";
+                                    }
+                                ?>
+                                <div class="col-md"></div>
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </main>
-            <?php
-                include("./page_components/footer.php");
-            ?>
+                </div>
+            </div>
         </div>
     </body>
 </html>

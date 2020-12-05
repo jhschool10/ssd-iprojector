@@ -9,45 +9,54 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./css/main.css">
-        <link rel="stylesheet" href="./css/log_in_log_out.css">
+        <link rel="stylesheet" href="./css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./css/animate.min.css"/>
         <style>
-            section:last-of-type {
-                background-image: url("./images/infinity_mirror_02.jpeg");
+            @media screen and (min-width: 768px) { /* md and above */
+                .jh-height {
+                    height: 66vh;
+                }
+            }
+            @media screen and (max-width: 767px) { /* sm and below */
+                .jh-height {
+                    height: 45vh;
+                }
+            }
+            .jh-height-header {
+                height: 10vh;
             }
         </style>
     </head>
-    <body>
-        <div class="container">
+    <body class='bg-secondary'>
+        <div class="container-fluid jh-height p-0 m-0">
             <?php
                 include("./page_components/header.php");
-                include("./page_components/nav.php");
             ?>
-            <main>
-                <h2>Goodbye</h2>
-                <section>
-                    <?php
-                        if (userIsLoggedIn()) {
-                            echo "Username: " . get("username") . " wants to leave.";
-                            session_destroy();
-                            $_SESSION = [];
-                            if (!userIsLoggedIn()) {
-                                echo "You've been logged out.";
+            <div class="jh-height justify-content-center align-items-center p-4 m-0">
+                
+                <section class="row d-flex flex-column align-items-center h-100 mt-3 p-4 w-100 bg-light rounded shadow text-center">
+                    <h2 class="animate__animated animate__fadeOut animate__delay-3s">Goodbye</h2>
+                    <div class="w-100 inline animate__animated animate__fadeOut animate__delay-4s">
+                        <?php
+                            if (userIsLoggedIn()) {
+                                echo "Username: " . get("username") . " wants to leave.";
+                                session_destroy();
+                                $_SESSION = [];
+                                if (!userIsLoggedIn()) {
+                                    echo "You've been logged out.";
+                                } else {
+                                    echo "Uh oh, error logging out. I don't know how to fix this";
+                                }
                             } else {
-                                echo "Uh oh, error logging out. I don't know how to fix this";
+                                echo " You're logged out.";
                             }
-                        } else {
-                            echo "Logging out, if you're not already logged in, sounds a little too menacing for this system.";
-                        }
-                    ?>
+                        ?>
+                    </div>
+                    <div class="col w-50 h-100 d-flex align-items-center">
+                        <img src="./images/infinity_mirror.jpg" class="w-100 animate__animated animate__fadeOut animate__delay-5s">
+                    </div>
                 </section>
-                <section>
-
-                </section>
-            </main>
-            <?php
-                include("./page_components/footer.php");
-            ?>
+            </div>
         </div>
     </body>
 </html>
