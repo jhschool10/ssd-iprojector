@@ -11,7 +11,11 @@ let querySettings = { // initialized to default
 getThoughts(querySettings.thought_set, querySettings.orderBy, querySettings.order, false)
     .then(thoughts => {
         for (const thought of thoughts) {
-            thoughtList.appendChild(createThoughtDiv(thought, false));
+            if (thought["user_id"] == this_user_id) {
+                thoughtList.appendChild(createThoughtDiv(thought, false, true));
+            } else {
+                thoughtList.appendChild(createThoughtDiv(thought, false, false));
+            }
         }
     });
 
