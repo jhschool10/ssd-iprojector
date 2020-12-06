@@ -13,7 +13,7 @@
                     echo "<a href='./user_thoughts.php'";
                     echo        "class='nav-link active'";
                     echo        "style='background-image: url(./images/icon_person_small.png); background-position: center; background-repeat: no-repeat;'>";
-                        echo "<span class='p-2' style='background-color: rgba(255, 255, 255, 0.9);'>Make</span>";
+                        echo "<span class='p-2' style='background-color: rgba(255, 255, 255, 0.9);'>Think</span>";
                     echo "</a>";
                 echo "</li>";
                 echo "<li class='nav-item'>";

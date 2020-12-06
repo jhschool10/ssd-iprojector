@@ -1,14 +1,12 @@
-async function getThoughts(orderBy, order, justForUser) {
+async function getThoughts(thoughtSet, orderBy, order) {
     let url = "./php_scripts/get_thoughts_from_db.php?";
     
+    url += "thought_set=" + thoughtSet;
+    url += "&";
     url += "order_by=" + orderBy;
     url += "&";
     url += "order=" + order;
     url += "&";
-
-    if (justForUser) {
-        url += "for_user=true";
-    }
 
     return fetch(url)
         .then(response => response.json())
