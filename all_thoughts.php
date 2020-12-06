@@ -9,8 +9,8 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="./css/animate.min.css"/>
+        <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./libraries/animate.min.css"/>
         <style>
         </style>
     </head>
@@ -20,7 +20,7 @@
                 include("./page_components/header.php");
             ?>
             <div class="row flex-column justify-content-center align-items-center p-4 m-0">
-                <div class="p-4 m-0 mb-4 h-100 w-100 bg-white border rounded shadow">
+                <div class="d-flex justify-content-between align-items-end p-4 m-0 mb-4 h-100 w-100 bg-white border rounded shadow">
                     <!-- Options -->
                     <?php
                         if (!userIsLoggedIn()) {
@@ -41,17 +41,33 @@
                                 echo "</label>";
                             echo "</div>";
                             echo "<div class='btn-group btn-group-toggle align-bottom' data-toggle='buttons'>";
-                                echo "<label class='btn btn-sm btn-secondary active'>";
-                                    echo "<input type='radio' name='options-thought-order' id='option_order_ascending' autocomplete='off' checked>";
-                                    echo "Ascending";
+                                echo "<label class='btn btn-sm btn-outline-secondary active'>";
+                                    echo "<input type='radio' name='options-thought-order' id='option_order_date_asc' autocomplete='off' checked>";
+                                    echo "&uarr; Date";
                                 echo "</label>";
-                                echo "<label class='btn btn-sm btn-secondary'>";
-                                    echo "<input type='radio' name='options-thought-order' id='option_order_desc' autocomplete='off'>";
-                                    echo "Descending";
+                                echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<input type='radio' name='options-thought-order' id='option_order_date_desc' autocomplete='off'>";
+                                    echo "&darr; Date";
                                 echo "</label>";
-                                echo "<label class='btn btn-sm btn-secondary'>";
+                                echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<input type='radio' name='options-thought-order' id='option_order_huzzahs_asc' autocomplete='off'>";
+                                    echo "&uarr; Huzzahs";
+                                echo "</label>";
+                                echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<input type='radio' name='options-thought-order' id='option_order_huzzahs_desc' autocomplete='off'>";
+                                    echo "&darr; Huzzahs";
+                                echo "</label>";
+                                echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<input type='radio' name='options-thought-order' id='option_order_username_asc' autocomplete='off'>";
+                                    echo "&uarr; Username";
+                                echo "</label>";
+                                echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<input type='radio' name='options-thought-order' id='option_order_username_desc' autocomplete='off'>";
+                                    echo "&darr; Username";
+                                echo "</label>";
+                                echo "<label class='btn btn-sm btn-outline-secondary'>";
                                     echo "<input type='radio' name='options-thought-order' id='option_order_random' autocomplete='off'>";
-                                    echo "Random";
+                                    echo "&#8621; Random";
                                 echo "</label>";
                             echo "</div>";
                         }
@@ -70,5 +86,7 @@
                 echo "<script src='./js_scripts/all_thoughts.js'></script>";
             }
         ?>
+        <script src="./libraries/jquery-3.5.1.min.js"></script>
+        <script src="./libraries/bootstrap.bundle.min.js"></script>
     </body>
 </html>

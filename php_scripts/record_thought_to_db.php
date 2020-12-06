@@ -16,6 +16,14 @@
             $was_successful = $statement->execute([$user_id, $thought_text]);
         }
 
+        // Get the inserted row and return it
+        if ($was_successful) {
+            $command = "SELECT t.id as thought_id, t.current_owner, t.date_created, t.thought_text, t.huzzahs, u.id as user_id, u.username, u.age FROM thoughts t INNER JOIN users u ON t.current_owner=u.id  WHERE thought_text = ?";
+            $statement = $dbh->prepare($command);
+            $was_successful = $statement->execute([$thought_text]);
+
+            $output["thought"] = $statement->fetch();
+        }
         $output["success"] = $was_successful;
     }
 

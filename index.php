@@ -7,8 +7,8 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="./css/animate.min.css"/>
+        <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./libraries/animate.min.css"/>
         <style>
             html, body {
                 height: 100%;
