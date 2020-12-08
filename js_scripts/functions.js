@@ -29,177 +29,165 @@ async function projectThought(user_id, thought_id) {
         .then(result => result.json())
         .then(status => status);
 }
-function replaceThought(oldThoughtId, newThoughtId) {
-    const thoughtEles = document.getElementById("thought_container").childNodes;
-
-    for (let thoughtEle of thoughtEles) {
-        if (parseInt(thoughtEle.getAttribute("data-id")) == oldThoughtId) {
-            
-            getOneThought(newThoughtId)
-                .then(thought => {
-                    thoughtEle.replaceWith(createThoughtDiv(thought[0], true, true));
-
-                })
-            break;
-        }
-    }
+function replaceThought(oldThought, newThoughtId) {
+    getOneThought(newThoughtId)
+        .then(thought => {
+            $(oldThought).replaceWith(createThoughtDiv(thought[0], true, true));
+        });
 };
 function showProjectionVisual(oldThought, newThought) {
+    const oldThoughtText = oldThought["thought_text"];
+    const otherUser = oldThought["username"];
+    const newThoughtText = oldThought["thought_text"];
 
+    const $container = $("<div>")
+                            .addClass("w-100 h-100 fixed-top d-flex justify-content-center align-items-center")
+                            .css("background-color", "rgba(108, 117, 125, 0.2");
+    $("body").append($container);
+
+        const $visualContainer = $("<div>")
+                                    .addClass("container-md bg-info w-50 h-50");
+        $($container).append($visualContainer);
+
+    setTimeout(function() {
+        $($container).remove();
+    }, 1000);
 }
 async function getThoughtHistory(thought_id) {
     return fetch("./php_scripts/get_thought_history_from_db.php?thought_id=" + thought_id)
         .then(result => result.json())
         .then(projectionRecords => projectionRecords);
 }
-function parseThoughtHistory(targetContainer, projectionRecords) {
-    targetContainer.innerHTML = "";
+function parseThoughtHistory($targetContainer, projectionRecords) {
+    $($targetContainer).html("");
     for (record of projectionRecords) {
-        let thing = document.createElement("P");
-        thing.innerHTML = record;
-        targetContainer.appendChild(thing);
+        let $thing = $("<p>")
+                        .html(record);
+        $($targetContainer).append($thing);
     }
 }
 function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
-    setNumThoughts();
+    const $thoughtContainer = $("<div>")
+                        .attr("data-id", thought["thought_id"]) // for finding this particular thought
+                        .addClass("thought-container mb-2 p-2 shadow border rounded");
 
-    const container = document.createElement("div");
-    container.setAttribute("class", "thought-container mb-2 p-2 shadow border rounded");
-    container.setAttribute("data-id", thought["thought_id"]); // for finding this particular thought
     if (isAnimated) { // Will animate the drawing of the thought to the screen (for when new thoughts are added by a user)
         // Timeout is necessary re: https://stackoverflow.com/questions/24148403/trigger-css-transition-on-appended-element
         setTimeout(function() {
-            container.classList.add("animate__animated");
-            container.classList.add("animate__rubberBand");
+            $($thoughtContainer).addClass("animate__animated animate__rubberBand");
         }, 50);
     }
 
-        const row1 = {
-            ele: document.createElement("div"),
-            children: [],
-        };
-        row1.ele.setAttribute("class", "CLICKABLE-thought d-flex border-bottom p-2");
-        row1.ele.addEventListener("click", function() {
-            const thought_id = thought["thought_id"];
-            getThoughtHistory(thought_id)
-                .then(projectionRecords => {
-                    parseThoughtHistory(row2.ele, projectionRecords);
-                });
-        }.bind(this), true);
-            const initial = document.createElement("h2");
-            initial.setAttribute("class", "align-self-end mr-3");
-            initial.innerHTML = "I... ";
-            row1.children.push(initial);
-
-            // let initial = $("<h2>")
-            //                 .html("I... ")
-            //                 .attr("css", "align-self-end mr-3");
-
-            const text = document.createElement("p");
-            text.setAttribute("class", "align-self-end font-italic");
-            text.innerHTML = thought["thought_text"];
-            row1.children.push(text);
+        const $row1 = $("<div>")
+                        .addClass("CLICKABLE-thought d-flex border-bottom p-2");
+        $($thoughtContainer).append($row1);
 
             if (isUserThought) {
-                const projectBtn = document.createElement("button");
-                projectBtn.setAttribute("type", "button");
-                projectBtn.innerHTML = "&target; Project";
-                projectBtn.setAttribute("class", "ml-3 align-self-center btn btn-outline-primary btn-sm");
-                projectBtn.addEventListener("click", function() {
-                    const loggedInUser = thought["current_owner"];
-                    projectThought(loggedInUser, thought["thought_id"])
-                        .then(function(status) {
-                            if (status.success) {
-                                const thoughts = status.message;
-                                let userNewThought, userOldThought;
-                                if (thoughts[0]["new_owner_id"] == loggedInUser) {
-                                    userNewThought = thoughts[0];
-                                    userOldThought = thoughts[1];
-                                } else {
-                                    userNewThought = thoughts[1];
-                                    userOldThought = thoughts[0];
-                                }
+                const $projectBtn = $("<button>")
+                                        .html("&target; Project")
+                                        .addClass("align-self-top btn btn-outline-primary btn-sm mr-3")
+                                        .on("click", function() {
+                                            const loggedInUser = thought["current_owner"];
+                                            projectThought(loggedInUser, thought["thought_id"])
+                                                .then(function(status) {
+                                                    if (status.success) {
+                                                        const thoughts = status.message;
+                                                        let userNewThought, userOldThought;
+                                                        if (thoughts[0]["new_owner_id"] == loggedInUser) {
+                                                            userNewThought = thoughts[0];
+                                                            userOldThought = thoughts[1];
+                                                        } else {
+                                                            userNewThought = thoughts[1];
+                                                            userOldThought = thoughts[0];
+                                                        }
 
-                                replaceThought(thought["thought_id"], userNewThought["thought_id"]);
-                                showProjectionVisual(userOldThought, userNewThought);
-                            }
-                        }.bind(this));
-                });
-
-                row1.children.push(projectBtn);
+                                                        replaceThought($thoughtContainer, userNewThought["thought_id"]);
+                                                        showProjectionVisual(userOldThought, userNewThought);
+                                                    }
+                                                })
+                                        });
+                $($row1).append($projectBtn);
             }
+
+            const $textContainer = $("<div>")
+                                    .addClass("d-flex align-self-stretch align-content-center w-100")
+                                    .on("click", function() {
+                                        const thought_id = thought["thought_id"];
+                                        getThoughtHistory(thought_id)
+                                            .then(projectionRecords => {
+                                                parseThoughtHistory($($row2), projectionRecords);
+                                            });
+                                    });
+            $($row1).append($textContainer);
+
+                const $initial = $("<h2>")
+                                .html("I... ")
+                                .addClass("pl-3 mr-3 border-left");
+                $($textContainer).append($initial);
+                    
+
+                const $text = $("<p>")
+                                .html(thought["thought_text"])
+                                .addClass("font-italic");
+                $($textContainer).append($text);
         
-            row1.ele.append(...row1.children);
-        
-        const row2 = {
-            ele: document.createElement("div"),
-            children: [],
-        }
-        row2.ele.setAttribute("class", "w-100");
+        const $row2 = $("<div>")
+                        .addClass("w-100");
+        $($thoughtContainer).append($row2);
 
 
-        const row3 = {
-            ele: document.createElement("div"),
-            children: [],
-        };
-        row3.ele.setAttribute("class", "row button justify-content-between align-items-center ml-2 mr-2 pt-2");
-            const huzzahBtn = document.createElement("input");
-            huzzahBtn.setAttribute("type", "button");
-            huzzahBtn.setAttribute("data-id", thought["thought_id"]);
-            huzzahBtn.setAttribute("class", "CLICKABLE-huzzah col-md btn btn-info btn-sm");
-            huzzahBtn.setAttribute("value", "Huzzah This Thought!");
-            huzzahBtn.addEventListener("click", function() {
-                huzzahBtn.disabled = true;
-                const thoughtID = thought["thought_id"];
-                fetch("./php_scripts/huzzah.php?thought_id=" + thoughtID)
-                    .then(response => response.json())
-                    .then(status => {
-                        if (status.success) {
-                            const huzzahNumTextNode = huzzahBtn.nextElementSibling.childNodes[0];
-                            const currentHuzzahs = parseInt(huzzahNumTextNode.textContent);
-                            huzzahNumTextNode.textContent = currentHuzzahs + 1;
-                        }
-                    })
-                setTimeout(function() {
-                    console.log("here");
-                    huzzahBtn.disabled = false;
-                }, 1000);
-            }.bind(this));
-            row3.children.push(huzzahBtn);
+        const $row3 = $("<div>")
+                        .addClass("row button justify-content-between align-items-center ml-2 mr-2 pt-2");
+        $($thoughtContainer).append($row3);
 
-            const huzzahNum = document.createElement("div");
-            huzzahNum.setAttribute("class", "col-md d-flex align-items-center");
-                huzzahNum.append(document.createTextNode(thought["huzzahs"]));
-                const huzzahImg = document.createElement("img");
-                huzzahImg.setAttribute("class", "bg-warning rounded-circle ml-2 p-1");
-                huzzahImg.src = "./images/huzzah.png";
-                huzzahImg.title = thought["huzzahs"] + " huzzahs so far";
-                huzzahImg.style.width = "20px";
-                huzzahImg.style.height = "20px";
-                huzzahNum.append(huzzahImg);
-            row3.children.push(huzzahNum);
+            const $huzzahBtn = $("<input>")
+                                .attr("type", "button")
+                                .attr("data-id", thought["thought_id"])
+                                .val("Huzzah This Thought!")
+                                .addClass("CLICKABLE-huzzah col-md btn btn-info btn-sm")
+                                .on("click", function() {
+                                    $(this).prop("disabled", true);
+                                    const thoughtID = thought["thought_id"];
+                                    fetch("./php_scripts/huzzah.php?thought_id=" + thoughtID)
+                                        .then(response => response.json())
+                                        .then(status => {
+                                            if (status.success) {
+                                                let numHuzzahsEle = $(this).next().children().first();
+                                                numHuzzahsEle.html(parseInt(numHuzzahsEle.html()) + 1);
+                                            }
+                                        })
 
-            const user = document.createElement("small");
-            user.setAttribute("class", "col-md text-sm mr-2");
-            user.innerHTML = " by <strong>" + thought["username"] + "</strong> (age " + thought["age"] + ")";
-            row3.children.push(user);
+                                    $thisHuzzahBtn = $(this); // can't use .bind() with jQuery objects
+                                    setTimeout(function() {
+                                        $thisHuzzahBtn.prop("disabled", false);
+                                    }, 1000);
+                                });
+            $($row3).append($huzzahBtn);
 
-            const date = document.createElement("small");
-            date.setAttribute("class", "col-md text-sm");
-            date.innerHTML = "on <strong>" + thought["date_created"] + "</strong>";
-            row3.children.push(date);
+            const $huzzahNum = $("<div>")
+                                .addClass("col-md mt-1")
+                                .append($("<span>")
+                                            .html(thought["huzzahs"]))
+                                .append($("<img>")
+                                            .attr("src", "./images/huzzah.png")
+                                            .attr("title", thought["huzzahs"] + " huzzahs so far")
+                                            .addClass("bg-warning rounded-circle ml-2 p-1")
+                                            .css("width", "20px")
+                                            .css("height", "20px"));
+            $($row3).append($huzzahNum);
 
-            row3.ele.append(...row3.children);
-        
-        container.append(row1.ele, row2.ele, row3.ele);
+            const $user = $("<small>")
+                            .html(" by <strong>" + thought["username"] + "</strong> (age " + thought["age"] + ")")
+                            .addClass("col-md text-sm mr-2 mt-1");
+            $($row3).append($user);
 
-    return container;
+            const $date = $("<small>")
+                            .html("on <strong>" + thought["date_created"] + "</strong>")
+                            .addClass("col-md text-sm mt-1");
+            $($row3).append($date);
+
+    return $thoughtContainer;
 }
 function setNumThoughts() {
-    const thoughtContainer = document.getElementById("thought_container");
-    const numThoughtsContainer = document.getElementById("num_thoughts");
-    if (thoughtContainer !== null && numThoughtsContainer !== null) {
-        const numThoughts = thoughtContainer.childNodes.length + 1;
-        numThoughtsContainer.innerHTML = numThoughts;
-    }
+    $("#num_thoughts").html($("#thoughts_container").children().length);
 }

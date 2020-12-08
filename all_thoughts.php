@@ -23,14 +23,14 @@
                 include("./page_components/header.php");
             ?>
             <div class="row flex-column justify-content-center align-items-center p-4 m-0">
-                <div class="p-4 m-0 mb-4 h-100 w-100 bg-white border rounded shadow">
+                <div class="pt-3 pr-4 pb-4 pl-4 m-0 mb-4 h-100 w-100 bg-white border rounded shadow">
                     <!-- Options -->
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
                         <?php
                             if (!userIsLoggedIn()) {
                                 echo "<p>You need to be logged in.</p>";
                             } else {
-                                echo "<div class='btn-group btn-group-toggle mr-2' data-toggle='buttons'>";
+                                echo "<div class='btn-group btn-group-toggle mr-2 mt-2' data-toggle='buttons'>";
                                     echo "<label class='btn btn-secondary btn-sm active'>";
                                         echo "<input type='radio' name='options-thought-set' id='option_set_AllThoughts' autocomplete='off' checked>";
                                         echo "All thoughts";
@@ -44,51 +44,57 @@
                                         echo "Not my thoughts";
                                     echo "</label>";
                                 echo "</div>";
-                                echo "<div class='btn-group btn-group-toggle align-bottom' data-toggle='buttons'>";
-                                    echo "<label class='btn btn-sm btn-outline-secondary active'>";
+                                echo "<div class='btn-group btn-group-toggle align-bottom align-items-start d-flex flex-wrap mt-2' data-toggle='buttons'>";
+                                    echo "<label class='btn btn-sm btn-outline-secondary active flex-grow-0'>";
                                         echo "<input type='radio' name='options-thought-order' id='option_order_date_asc' autocomplete='off' checked>";
                                         echo "&uarr; Date";
                                     echo "</label>";
-                                    echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<label class='btn btn-sm btn-outline-secondary flex-grow-0'>";
                                         echo "<input type='radio' name='options-thought-order' id='option_order_date_desc' autocomplete='off'>";
                                         echo "&darr; Date";
                                     echo "</label>";
-                                    echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<label class='btn btn-sm btn-outline-secondary flex-grow-0'>";
                                         echo "<input type='radio' name='options-thought-order' id='option_order_huzzahs_asc' autocomplete='off'>";
                                         echo "&uarr; Huzzahs";
                                     echo "</label>";
-                                    echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<label class='btn btn-sm btn-outline-secondary flex-grow-0'>";
                                         echo "<input type='radio' name='options-thought-order' id='option_order_huzzahs_desc' autocomplete='off'>";
                                         echo "&darr; Huzzahs";
                                     echo "</label>";
-                                    echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<label class='btn btn-sm btn-outline-secondary flex-grow-0'>";
                                         echo "<input type='radio' name='options-thought-order' id='option_order_username_asc' autocomplete='off'>";
                                         echo "&uarr; Username";
                                     echo "</label>";
-                                    echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<label class='btn btn-sm btn-outline-secondary flex-grow-0'>";
                                         echo "<input type='radio' name='options-thought-order' id='option_order_username_desc' autocomplete='off'>";
                                         echo "&darr; Username";
                                     echo "</label>";
-                                    echo "<label class='btn btn-sm btn-outline-secondary'>";
+                                    echo "<label class='btn btn-sm btn-outline-secondary flex-grow-0'>";
                                         echo "<input type='radio' name='options-thought-order' id='option_order_random' autocomplete='off'>";
-                                        echo "&#8621; Random";
+                                        echo "&#9736; Random";
                                     echo "</label>";
                                 echo "</div>";
-                                echo "<div>";
+                                echo "<div class='mt-2'>";
                                     echo "<button type='button' class='btn btn-primary btn-lg' id='refresh_thought_list'><img src='./images/refresh.png' style='width: 30px; height: 30px;'></button>";
                                 echo "</div>";
                             }
                         ?>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center align-content-center p-4 mb-4 h-100 w-100 bg-white border rounded shadow">
-                    <p>Still trying to think of more things to put in this nice box I made.</p><br>
-                    <p>Click a thought to get more information about it.</p><br>
-                    <p>Huzzah thoughts for whatever reason, but please, be reasonable: only one huzzah per second.</p>
+                <div class="d-flex justify-content-center p-4 mb-4 h-100 w-100 bg-white border rounded shadow">
+                    <div class="d-flex flex-column w-50">
+                        <p class="lead">Click a thought to get more information about it.</p><br>
+                        <p class="lead">One day it could be yours.</p><br>
+                        <p class="lead">Huzzah thoughts for whatever reason.</p><br>
+                        <div class="d-flex justify-content-center">
+                            <iframe class="mb-2" width="300" height="169" src="https://www.youtube.com/embed/gazIa2IibZA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <p class="lead">But please, be reasonable. Only one per second.</p><br>
+                    </div>
                 </div>
                 <div class="p-4 mb-4 h-100 w-100 bg-white border rounded shadow">
                     <h2 class="mb-4">Thoughts (<span id="num_thoughts"></span>)</h2>
-                    <div id="thought_container"></div>
+                    <div id="thoughts_container"></div>
                 </div>
             </div>
         </div>

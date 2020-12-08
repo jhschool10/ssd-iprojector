@@ -1,6 +1,5 @@
 // Init
-const thoughtList = document.getElementById("thought_container");
-thoughtList.innerHTML = "";
+$("#thoughts_container").html("");
 
 let querySettings = { // initialized to default
     thought_set: "all", // One of: all, user, not_user
@@ -12,11 +11,14 @@ getThoughts(querySettings.thought_set, querySettings.orderBy, querySettings.orde
     .then(thoughts => {
         for (const thought of thoughts) {
             if (thought["user_id"] == this_user_id) {
-                thoughtList.appendChild(createThoughtDiv(thought, false, true));
+                $("#thoughts_container").append(createThoughtDiv(thought, false, true));
             } else {
-                thoughtList.appendChild(createThoughtDiv(thought, false, false));
+                $("#thoughts_container").append(createThoughtDiv(thought, false, false));
             }
         }
+    })
+    .then(function() {
+        setNumThoughts();
     });
 
 // Listeners
@@ -60,13 +62,16 @@ $("#option_set_NotUserThoughts").click(function() {
 $("#refresh_thought_list").click(function() {
     getThoughts(querySettings.thought_set, querySettings.orderBy, querySettings.order)
     .then(thoughts => {
-        thoughtList.innerHTML = "";
+        $("#thoughts_container").html("");
         for (const thought of thoughts) {
             if (thought["user_id"] == this_user_id) {
-                thoughtList.appendChild(createThoughtDiv(thought, false, true));
+                $("#thoughts_container").append(createThoughtDiv(thought, false, true));
             } else {
-                thoughtList.appendChild(createThoughtDiv(thought, false, false));
+                $("#thoughts_container").append(createThoughtDiv(thought, false, false));
             }
         }
+    })
+    .then(function() {
+        setNumThoughts();
     });
 });

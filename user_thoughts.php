@@ -23,6 +23,10 @@
                 border: white 2px solid;
                 box-shadow: 0.75em 0.75em 0.5em 0 black;
             }
+                #submit_button:hover {
+                    box-shadow: 0.5em 0.5em 0.5em 0 black;
+                    transform: translateX(0.25em) translateY(0.25em);
+                }
                 #submit_button:active {
                     box-shadow: 0.25em 0.25em 0.5em 0 black;
                     transform: translateX(0.5em) translateY(0.5em);
@@ -46,9 +50,9 @@
                         } else {
                             echo "<form id='record_thought' class='justify-content-center'>";
                                 echo "<div class='d-flex justify-content-center'>";
-                                    echo "<div class='w-75 row'>";
-                                        echo "<label for='thought_text' class='col-2 display-3'>I...</label>";
-                                        echo "<input type='text' name='thought_text' class='col border-top-0 border-left-0 border-right-0 lead' id='thought_text' placeholder='have a thought and wanna share it' required>";
+                                    echo "<div class='w-75 row align-items-end'>";
+                                        echo "<label for='thought_text' class='col-2 display-4 mb-0'>I...</label>";
+                                        echo "<input type='text' id='thoughtTxt' name='thought_text' class='col border-top-0 border-left-0 form-control-lg border-right-0 lead mb-2' id='thought_text' placeholder='have a thought and wanna share it' required>";
                                     echo "</div>";
                                 echo "</div>";
                                 echo "<div class='d-flex justify-content-center w-100'>";
@@ -60,7 +64,7 @@
                 </div>
                 <div class="p-4 m-0 mt-4 h-100 w-100 bg-light border rounded shadow">
                     <h2 class="mb-4"><?= get("username"); ?>'s thoughts (<span id="num_thoughts"></span>)</h2>
-                    <div id="thought_container" class="d-flex flex-column-reverse">
+                    <div id="thoughts_container" class="d-flex flex-column">
                             
                     </div>
                 </div>
