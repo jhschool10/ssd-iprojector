@@ -32,26 +32,121 @@ async function projectThought(user_id, thought_id) {
 function replaceThought(oldThought, newThoughtId) {
     getOneThought(newThoughtId)
         .then(thought => {
-            $(oldThought).replaceWith(createThoughtDiv(thought[0], true, true));
+            setTimeout(function() {
+                $(oldThought).replaceWith(createThoughtDiv(thought[0], true, true));
+            }, 4500)
         });
 };
-function showProjectionVisual(oldThought, newThought) {
+async function showProjectionVisual(oldThought, newThought) {
     const oldThoughtText = oldThought["thought_text"];
-    const otherUser = oldThought["username"];
-    const newThoughtText = oldThought["thought_text"];
+    const otherUser = oldThought["new_owner_username"] + " (age " + oldThought["new_owner_age"] + ")";
+    const newThoughtText = newThought["thought_text"];
 
-    const $container = $("<div>")
-                            .addClass("w-100 h-100 fixed-top d-flex justify-content-center align-items-center")
-                            .css("background-color", "rgba(108, 117, 125, 0.2");
-    $("body").append($container);
+    const $window = $("<div>")
+                        .addClass("w-100 h-100 fixed-top d-flex justify-content-center align-items-center")
+                        .css("background-color", "rgba(108, 117, 125, 0.5");
+    $("body").append($window);
 
-        const $visualContainer = $("<div>")
-                                    .addClass("container-md bg-info w-50 h-50");
-        $($container).append($visualContainer);
+        const $visual = $("<div>")
+                            .addClass("container-md d-flexbg-info w-100 h-50 rounded border shadow bg-white position-relative")
+                            .css("max-width", "576px"); // bootstrap "sm"
+        $($window).append($visual);
+
+            const $otherUserContainer = $("<div>")
+                                        .addClass("position-absolute")
+                                        .css("width", "50%") // (in lieu of Bootstrap) required to make animation work
+                                        .css("height", "50%") // (in lieu of Bootstrap) required to make animation work
+                                        .css("top", "1em")
+                                        .css("right", "1em")
+                                        .css("background-image", "url(./images/icon_person.png)")
+                                        .css("background-size", "contain")
+                                        .css("background-position", "right top")
+                                        .css("background-repeat", "no-repeat")
+                                        .delay(2000)
+                                        .animate({
+                                            width: "100%",
+                                            height: "100%",
+                                        }, 2000);
+            $($visual).append($otherUserContainer);
+            
+            const $userContainer = $("<div>")
+                                        .addClass("w-75 h-75 position-absolute")
+                                        .css("bottom", "1em")
+                                        .css("left", "1em")
+                                        .css("background-image", "url(./images/icon_person_02.png)")
+                                        .css("background-size", "contain")
+                                        .css("background-position", "left bottom")
+                                        .css("background-repeat", "no-repeat")
+                                        .delay(2000)
+                                        .animate({
+                                            opacity: 0,
+                                        }, 2000);
+            $($visual).append($userContainer);
+
+            const $userLabel = $("<div>")
+                                    .html("Me")
+                                    .addClass("position-absolute bg-secondary display-3 rounded pt-1 pb-1 pl-2 pr-2 text-white")
+                                    .css("bottom", "10px")
+                                    .css("left", "10px")
+                                    .delay(2000)
+                                    .animate({
+                                        opacity: 0,
+                                    }, 2000);
+            $($visual).append($userLabel);
+
+            const $otherUserLabel = $("<small>")
+                                    .html(otherUser)
+                                    .addClass("position-absolute bg-secondary rounded pt-1 pb-1 pl-2 pr-2 text-white")
+                                    .css("top", "10px")
+                                    .css("right", "10px");
+            $($visual).append($otherUserLabel);
+
+            const textPositionUser = {
+                top: "25%",
+                left: "10px",
+            }
+            const textPositionOtherUser = {
+                top: "40px",
+                left: "50%",
+            }
+            
+            const $oldThoughtText = $("<div>")
+                                        .html("\"I " + oldThoughtText + "\"")
+                                        .addClass("position-absolute bg-light text-center p-2 font-italic")
+                                        .css("width", "48%")
+                                        .css("top", textPositionUser.top)
+                                        .css("left", textPositionUser.left)
+                                        .delay(2000)
+                                        .animate({
+                                            top: textPositionOtherUser.top,
+                                            left: textPositionOtherUser.left,
+                                        }, 2000);
+            $($visual).append($oldThoughtText);
+
+            const $newThoughtText = $("<div>")
+                                        .html("\"I " + newThoughtText + "\"")
+                                        .addClass("position-absolute bg-light text-center p-2 font-italic")
+                                        .css("width", "48%")
+                                        .css("top", textPositionOtherUser.top)
+                                        .css("left", textPositionOtherUser.left)
+                                        .delay(2000)
+                                        .animate({
+                                            top: textPositionUser.top,
+                                            left: textPositionUser.left,
+                                            opacity: 0,
+                                        }, 2000);
+            $($visual).append($newThoughtText);
 
     setTimeout(function() {
-        $($container).remove();
-    }, 1000);
+        $($visual)
+            .animate({
+                opacity: 0
+            }, 500)
+        setTimeout(function() {
+            $($window)
+                .remove()
+        }, 500);
+    }, 4500);
 }
 async function getThoughtHistory(thought_id) {
     return fetch("./php_scripts/get_thought_history_from_db.php?thought_id=" + thought_id)
@@ -74,7 +169,8 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
     if (isAnimated) { // Will animate the drawing of the thought to the screen (for when new thoughts are added by a user)
         // Timeout is necessary re: https://stackoverflow.com/questions/24148403/trigger-css-transition-on-appended-element
         setTimeout(function() {
-            $($thoughtContainer).addClass("animate__animated animate__rubberBand");
+            $($thoughtContainer)
+                .addClass("animate__animated animate__rubberBand");
         }, 50);
     }
 
@@ -100,9 +196,8 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
                                                             userNewThought = thoughts[1];
                                                             userOldThought = thoughts[0];
                                                         }
-
-                                                        replaceThought($thoughtContainer, userNewThought["thought_id"]);
-                                                        showProjectionVisual(userOldThought, userNewThought);
+                                                        showProjectionVisual(userOldThought, userNewThought)
+                                                            .then(() => { replaceThought($thoughtContainer, userNewThought["thought_id"]) });
                                                     }
                                                 })
                                         });
