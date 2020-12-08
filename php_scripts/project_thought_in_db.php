@@ -39,12 +39,15 @@
                         $command = "
                             SELECT  date as trade_date,
                                     thought_id,
+                                    t.thought_text,
                                     new_owner as new_owner_id,
                                     username as new_owner_username,
                                     age as new_owner_age
                             FROM projection_log p
                             INNER JOIN users u
-                            ON p.new_owner = u.id
+                                ON p.new_owner = u.id
+                            INNER JOIN thoughts t
+                                ON thought_id = t.id
                             WHERE trade_id = (  SELECT MAX(trade_id) as trade_id FROM projection_log
                                                 WHERE new_owner = ?); 
                         ";
