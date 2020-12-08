@@ -21,12 +21,15 @@
             $usernameIsValid = false;
         }
 
+        $hash;
         $passwordIsValid = true;
         if ($user_password == false or
             $user_password == null or
             strlen($user_password) < 8) {
 
             $passwordIsValid = false;
+        } else {
+            $hash = password_hash($user_password, PASSWORD_DEFAULT);
         }
 
         $ageIsValid = true;
@@ -51,7 +54,7 @@
         if ($usernameIsValid and $passwordIsValid and $ageIsValid) {
             $command = "INSERT INTO users (username, pass, email_address, first_name, last_name, age) VALUE (?, ?, ?, ?, ?, ?)";
             $statement = $dbh->prepare($command);
-            $db_call_successful = $statement->execute([$username, $user_password, $user_email, $user_firstname, $user_lastname, $user_age]);
+            $db_call_successful = $statement->execute([$username, $hash, $user_email, $user_firstname, $user_lastname, $user_age]);
         }
     }
 ?><!DOCTYPE html>
@@ -84,7 +87,7 @@
                 include("./page_components/header.php");
             ?>
             <div class="jh-height justify-content-center align-items-center p-4 m-0">
-                <div class='h-100 w-100 bg-light border rounded shadow p-4' id='content_box'>
+                <div class='h-100 w-100 bg-white border rounded shadow p-4' id='content_box'>
                     <h2 class="d-flex w-100 justify-content-center text-center pb-3">Create an account</h2>
                     <div class="row justify-content-center">
                         <?php
@@ -114,37 +117,33 @@
                             <div class="row pb-3 justify-content-center">
                                 <label for="username" class="col-sm-3 text-md-left text-center">Username:</label>
                                 <input type="text" name="username" class="col-5" required>
-                                <div class="text-info col-md text-md-left text-center">(Must be at least five digits; numbers and letters only)</div>
+                                <small class="text-info col-md text-md-left text-center">(Must be at least five digits; numbers and letters only)</small>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_password" class="col-sm-3 text-md-left text-center">Password:</label>
                                 <input type="password" name="user_password" class="col-5" required>
-                                <div class="text-info col-md text-md-left text-center">(Must be at least 8 characters)</div>
+                                <small class="text-info col-md text-md-left text-center">(Must be at least 8 characters)</small>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_password_confirm" class="col-sm-3 text-md-left text-center">Confirm password:</label>
                                 <input type="password" name="user_password_confirm" class="col-5" required>
-                                <div class="text-info col-md text-md-left text-center"></div>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_email" class="col-sm-3 text-md-left text-center">Email:</label>
                                 <input type="email" name="user_email" class="col-5">
-                                <div class="text-info col-md text-md-left text-center"></div>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_firstname" class="col-sm-3 text-md-left text-center">First name:</label>
                                 <input type="text" name="user_firstname" class="col-5">
-                                <div class="text-info col-md text-md-left text-center"></div>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_lastname" class="col-sm-3 text-md-left text-center">Last name:</label>
                                 <input type="text" name="user_lastname" class="col-5">
-                                <div class="text-info col-md text-md-left text-center"></div>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_age" class="col-sm-3 text-md-left text-center">Age</label>
                                 <input type="number" name="user_age" class="col-5" required>
-                                <div class="text-info col-md text-md-left text-center">(You must be over 13)</div>
+                                <small class="text-info col-md text-md-left text-center">(You must be over 13)</small>
                             </div>
                             <div class="row justify-content-center">
                                 <div class="col-3"></div>

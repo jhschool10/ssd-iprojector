@@ -2,7 +2,7 @@
 
     echo "<header class='row w-100 m-0 p-0 pb-2 border-bottom bg-white'>";
 
-        echo "<h1 class='col-md-4 text-center w-100 p-0 m-0 mt-3'><a class='' href='./index.php'>iProjector</a></h1>";
+        echo "<h1 class='col-md-4 text-center w-100 p-0 m-0 mt-3'><a class='' href='./log_in.php'>iProjector</a></h1>";
 
         echo "<ul class='col-md nav w-100 justify-content-end align-items-baseline mt-4'>";
             if (userIsLoggedIn()) {

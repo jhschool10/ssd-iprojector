@@ -30,14 +30,14 @@
 
         $user_logged_in = false;
         if ($usernameIsValid and $passwordIsValid) {
-            $command = "SELECT id, pass, last_login FROM users WHERE username = ?";
+            $command = "SELECT id, pass as hash_pass, last_login FROM users WHERE username = ?";
             $statement = $dbh->prepare($command);
             $was_successful = $statement->execute([$username]);
 
             if ($was_successful) {
                 $user_info = $statement->fetch();
 
-                if ($user_password == $user_info["pass"]) {
+                if (password_verify($user_password, $user_info["hash_pass"])) {
                     logUserIn($user_info["id"], $username);
                     $last_login = "You last logged in: " . $user_info["last_login"];
                 }
@@ -105,14 +105,19 @@
                 include("./page_components/header.php");
             ?>
             <div class="row jh-height justify-content-center align-items-center p-4 m-0">
-                <section class="col-md h-100 mt-3">
-                    <?php
-                        if (userIsLoggedIn()) { // Successful login
-                            // LANDING PAGE
-                            echo    "<div class='h-100 w-100 bg-light border rounded shadow' id='head_image'>";
-                            echo        "<a href='./user_thoughts.php' class='d-inline-block w-100 h-100 pt-5 pl-5'><span class='border border p-2 rounded bg-primary text-white'>My thoughts</span></a>";
-                            echo    "</div>";
-                        } else {
+                
+                <?php
+                    if (userIsLoggedIn()) { // Successful login
+                        // LANDING PAGE
+                        echo "<section class='d-flex flex-column align-items-center mt-2 p-4 w-100 bg-white rounded shadow text-center'>";
+                            echo "<h2 class='display-4'>Instructions</h2>";
+                            echo "<p class='lead'>Record a thought.</p>";
+                            echo "<p class='lead'>When you get tired of it project it onto another user.</p>";
+                            echo "<p class='lead'>But be careful.</p>";
+                            echo "<p class='lead'>You'll get one of their thoughts in return.</p>";
+                        echo "</section>";
+                    } else {
+                        echo "<section class='col-md mt-2'>";
                             echo "<form method='POST' action='log_in.php' class='h-100 w-100 d-flex flex-column justify-content-center align-items-center p-4 bg-light border rounded shadow'>";
                                 echo "<div class='row w-50'>";
                                     echo "<label for='username' class='col text-center mb-0'>Username:</label>";
@@ -133,23 +138,17 @@
                                     $_SESSION = [];
                                 }
                             echo "</form>";
-                        }
-                    ?>
-                </section>
-                <section class="col-md h-100 mt-3">
-                    <?php
-                        if (userIsLoggedIn()) {
-                            echo "<div class='h-100 w-100 bg-light border rounded shadow' id='globe_image'>";
-                                echo "<a href='./all_thoughts.php' class='d-inline-block w-100 h-100 pt-5 pl-5'>";
-                                    echo "<span class='border border p-2 rounded bg-primary text-white'>Other thoughts</span>";
-                                echo "</a>";
-                            echo "</div>";
-                        } else {
+                        echo "</section>";
+                    }
+                ?>
+                <?php // Second column (only for log-in image)
+                    if (!userIsLoggedIn()) {
+                        echo "<section class='col-md h-100 mt-3'>";
                             echo "<div class='h-100 w-100 bg-light rounded shadow' id='mirror_image'>";
                             echo "</div>";
-                        }
-                    ?>
-                </section>
+                        echo "</section>";
+                    }
+                ?>
             </div>
         </div>
         <?php

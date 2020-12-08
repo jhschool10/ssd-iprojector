@@ -42,7 +42,7 @@
                 include("./page_components/header.php");
             ?>
             <div class="justify-content-center align-items-center p-4 m-0">
-                <div class="justify-content-center align-items-center p-4 m-0 h-100 w-100 bg-light border rounded shadow">
+                <div class="justify-content-center align-items-center p-4 m-0 h-100 w-100 bg-white border rounded shadow">
                     <div id="success_message" class="text-center mb-2 text-danger"></div>
                     <?php
                         if (!userIsLoggedIn()) {
@@ -62,7 +62,7 @@
                         }
                     ?>
                 </div>
-                <div class="p-4 m-0 mt-4 h-100 w-100 bg-light border rounded shadow">
+                <div class="p-4 m-0 mt-4 h-100 w-100 bg-white border rounded shadow">
                     <h2 class="mb-4"><?= get("username"); ?>'s thoughts (<span id="num_thoughts"></span>)</h2>
                     <div id="thoughts_container" class="d-flex flex-column">
                             
