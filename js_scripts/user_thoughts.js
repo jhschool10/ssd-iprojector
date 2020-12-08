@@ -1,7 +1,7 @@
 const thoughtList = document.getElementById("thought_container");
 thoughtList.innerHTML = "";
 
-getThoughts("date", "desc", true)
+getThoughts("user", "date", "desc")
     .then(thoughts => {
         for (const thought of thoughts) {
             thoughtList.appendChild(createThoughtDiv(thought, false, true));

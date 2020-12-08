@@ -48,7 +48,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Log in? Log in!</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
@@ -152,5 +152,11 @@
                 </section>
             </div>
         </div>
+        <?php
+            if (userIsLoggedIn()) {
+                echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
+                echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
+            }
+        ?>
     </body>
 </html>

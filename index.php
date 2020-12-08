@@ -4,7 +4,7 @@
 ?><!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>My thoughts? Your thoughts? iProjector!</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
@@ -67,8 +67,8 @@
                         <h1 class="font-weight-bold ">iProjector</h1>
                         <h2>a new way to look at yourself</h2>
                         <p>Record your thoughts.</p>
-                        <p>See other peoples' thoughts.</p>
-                        <p>Shuffle them around.</p>
+                        <p>Project them onto others.</p>
+                        <p>Return the favour.</p>
                         <p>We do the hokey pokey</p>
                         <p>and that's what it's all about.</p>
                         <div class="row">

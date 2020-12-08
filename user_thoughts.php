@@ -6,7 +6,7 @@
 ?><!DOCTYPE html>
 <html>
     <head>
-        <title>User thoughts</title>
+        <title>My thoughts? My thoughts!</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
@@ -27,6 +27,9 @@
                     box-shadow: 0.25em 0.25em 0.5em 0 black;
                     transform: translateX(0.5em) translateY(0.5em);
                 }
+            .thought-container:hover {
+                background-color: rgba(0, 123, 255, 0.05);
+            }
         </style>
     </head>
     <body class='bg-light'>
@@ -64,6 +67,8 @@
             </div>
             <?php
                 if (userIsLoggedIn()) {
+                    echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
+                    echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
                     echo "<script src='./js_scripts/functions.js'></script>";
                     echo "<script src='./js_scripts/user_thoughts.js'></script>";
                 }

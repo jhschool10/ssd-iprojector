@@ -6,12 +6,15 @@
 ?><!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Your thoughts? Your thoughts!</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
         <link rel="stylesheet" href="./libraries/animate.min.css"/>
         <style>
+            .thought-container:hover {
+                background-color: rgba(0, 123, 255, 0.05);
+            }
         </style>
     </head>
     <body class='bg-light'>
@@ -79,7 +82,9 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center align-content-center p-4 mb-4 h-100 w-100 bg-white border rounded shadow">
-                    <p>Click a thought for more details!</p>
+                    <p>Still trying to think of more things to put in this nice box I made.</p><br>
+                    <p>Click a thought to get more information about it.</p><br>
+                    <p>Huzzah thoughts for whatever reason, but please, be reasonable: only one huzzah per second.</p>
                 </div>
                 <div class="p-4 mb-4 h-100 w-100 bg-white border rounded shadow">
                     <h2 class="mb-4">Thoughts (<span id="num_thoughts"></span>)</h2>

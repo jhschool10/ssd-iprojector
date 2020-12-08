@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Log out? Log out!</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
@@ -32,11 +32,11 @@
             <?php
                 include("./page_components/header.php");
             ?>
-            <div class="jh-height justify-content-center align-items-center p-4 m-0">
+            <div class="jh-height justify-content-center align-items-center p-4 m-0 animate__animated animate__fadeOut animate__delay-5s">
                 
-                <section class="row d-flex flex-column align-items-center h-100 mt-3 p-4 w-100 bg-light rounded shadow text-center">
-                    <h2 class="animate__animated animate__fadeOut animate__delay-3s">Goodbye</h2>
-                    <div class="w-100 inline animate__animated animate__fadeOut animate__delay-4s">
+                <section class="d-flex flex-column align-items-center mt-3 p-4 w-100 bg-light rounded shadow text-center">
+                    <h2 class="animate__animated animate__fadeOut animate__delay-2s">Goodbye</h2>
+                    <div class="w-100 mb-2 inline animate__animated animate__fadeOut animate__delay-3s">
                         <?php
                             if (userIsLoggedIn()) {
                                 echo "Username: " . get("username") . " wants to leave.";
@@ -52,11 +52,17 @@
                             }
                         ?>
                     </div>
-                    <div class="col w-50 h-100 d-flex align-items-center">
-                        <img src="./images/infinity_mirror.jpg" class="w-100 animate__animated animate__fadeOut animate__delay-5s">
+                    <div class="w-50 d-flex align-items-center">
+                        <img src="./images/infinity_mirror.jpg" class="w-100 animate__animated animate__fadeOut animate__delay-4s">
                     </div>
                 </section>
             </div>
         </div>
+        <?php
+            if (userIsLoggedIn()) {
+                echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
+                echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
+            }
+        ?>
     </body>
 </html>
