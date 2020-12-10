@@ -154,11 +154,25 @@ async function getThoughtHistory(thought_id) {
         .then(projectionRecords => projectionRecords);
 }
 function parseThoughtHistory($targetContainer, projectionRecords) {
-    $($targetContainer).html("");
+    $($targetContainer).html("")
+                        .addClass("bg-white rounded shadow-small p-2")
+                        .css("box-shadow", "0 0 5px 5px rgba(0, 0, 0, 0.03) inset")
+                        .css("overflow-x", "visible")
+                        .attr("data-isFilled", "true");
+    
+    const levelWidth = 15;
+    let level = 1;
     for (record of projectionRecords) {
-        let $thing = $("<p>")
-                        .html(record);
-        $($targetContainer).append($thing);
+        
+        let $users = $("<small>")
+                        .html(
+                            "&rdsh; " + record["old_owner_username"]
+                            )
+                        .attr("title", "Projection date: " + record["trade_date"])
+                        .addClass("d-block")
+                        .css("margin-left", (levelWidth * level) + "px");
+        $($targetContainer).append($users);
+        level++;
     }
 }
 function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
@@ -206,12 +220,21 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
 
             const $textContainer = $("<div>")
                                     .addClass("d-flex align-self-stretch align-content-center w-100")
+                                    .css("cursor", "pointer")
                                     .on("click", function() {
-                                        const thought_id = thought["thought_id"];
-                                        getThoughtHistory(thought_id)
-                                            .then(projectionRecords => {
-                                                parseThoughtHistory($($row2), projectionRecords);
-                                            });
+                                        $targetRow = $($row2);
+                                        if ($targetRow.attr("data-isFilled") === "false") {
+                                            const thought_id = thought["thought_id"];
+                                            getThoughtHistory(thought_id)
+                                                .then(projectionRecords => {
+                                                    parseThoughtHistory($($row2), projectionRecords);
+                                                });
+                                            $targetRow.attr("data-isFilled", "true");
+                                        } else {
+                                            $targetRow.html("");
+                                            $targetRow.attr("data-isFilled", "false");
+                                        }
+                                        
                                     });
             $($row1).append($textContainer);
 
@@ -227,7 +250,8 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
                 $($textContainer).append($text);
         
         const $row2 = $("<div>")
-                        .addClass("w-100");
+                        .addClass("w-100 mt-2")
+                        .attr("data-isFilled", "false");
         $($thoughtContainer).append($row2);
 
 
