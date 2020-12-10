@@ -81,17 +81,6 @@
                         ?>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center p-4 mb-4 h-100 w-100 bg-white border rounded shadow">
-                    <div class="d-flex flex-column w-50">
-                        <p class="lead">Click a thought to get more information about it.</p><br>
-                        <p class="lead">One day it could be yours.</p><br>
-                        <p class="lead">Huzzah thoughts for whatever reason.</p><br>
-                        <div class="d-flex justify-content-center">
-                            <iframe class="mb-2" width="300" height="169" src="https://www.youtube.com/embed/gazIa2IibZA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </div>
-                        <p class="lead">But please, be reasonable. Only one per second.</p><br>
-                    </div>
-                </div>
                 <div class="p-4 mb-4 h-100 w-100 bg-white border rounded shadow">
                     <h2 class="mb-4">Thoughts (<span id="num_thoughts"></span>)</h2>
                     <div id="thoughts_container"></div>

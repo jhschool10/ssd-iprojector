@@ -104,24 +104,31 @@
             <?php // Header and Nav
                 include("./page_components/header.php");
             ?>
-            <div class="row jh-height justify-content-center align-items-center p-4 m-0">
+            <div class="row jh-height justify-content-center p-4 m-0">
                 
                 <?php
                     if (userIsLoggedIn()) { // Successful login
                         // LANDING PAGE
-                        echo "<section class='d-flex flex-column align-items-center mt-2 p-4 w-100 bg-white rounded shadow text-center'>";
+                        echo "<section class='d-flex flex-column mt-2 p-4 w-100 bg-white rounded shadow text-center'>";
                             echo "<h2 class='display-4'>Instructions</h2>";
                             echo "<p class='lead'>Record a thought.</p>";
                             echo "<p class='lead'>When you get tired of it project it onto another user.</p>";
                             echo "<p class='lead'>But be careful.</p>";
                             echo "<p class='lead'>You'll get one of their thoughts in return.</p>";
+                            echo "<p class='lead'>Click a thought to get more information about it.</p>";
+                            echo "<p class='lead'>One day it could be yours.</p>";
+                            echo "<p class='lead'>Huzzah thoughts for whatever reason.</p>";
+                            echo "<p class='lead'>But please, be reasonable. Only one per second.</p>";
+                            echo "<div class='d-flex justify-content-center'>";
+                                echo "<iframe class='mb-2' width='300' height='169' src='https://www.youtube.com/embed/gazIa2IibZA' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>";
+                            echo "</div>";
                         echo "</section>";
                     } else {
                         echo "<section class='col-md mt-2'>";
                             echo "<form method='POST' action='log_in.php' class='h-100 w-100 d-flex flex-column justify-content-center align-items-center p-4 bg-light border rounded shadow'>";
                                 echo "<div class='row w-50'>";
                                     echo "<label for='username' class='col text-center mb-0'>Username:</label>";
-                                    echo "<input type='text' name='username' class='col mb-2' required>";
+                                    echo "<input type='text' name='username' class='col mb-2' pattern='\w{5,}' title='(5 or more characters; alphanumeric only)' required>";
                                 echo "</div>";
                                 echo "<div class='row w-50'>";
                                     echo "<label for='user_password' class='col text-center mb-0'>Password:</label>";
@@ -143,7 +150,7 @@
                 ?>
                 <?php // Second column (only for log-in image)
                     if (!userIsLoggedIn()) {
-                        echo "<section class='col-md h-100 mt-3'>";
+                        echo "<section class='col-md h-100 mt-2'>";
                             echo "<div class='h-100 w-100 bg-light rounded shadow' id='mirror_image'>";
                             echo "</div>";
                         echo "</section>";

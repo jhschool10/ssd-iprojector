@@ -90,55 +90,61 @@
                 <div class='h-100 w-100 bg-white border rounded shadow p-4' id='content_box'>
                     <h2 class="d-flex w-100 justify-content-center text-center pb-3">Create an account</h2>
                     <div class="row justify-content-center">
-                        <?php
-                            if (userIsLoggedIn()) {
-                                echo "<p>";
-                                echo    "Hello " . get("username");
-                                echo "</p>";
-                            } else if ($formWasSubmitted) {
-                                if ($usernameIsValid and $passwordIsValid and $ageIsValid) {
-                                    if ($db_call_successful) {
-                                        echo "<div class='text-success pb-4'>";
-                                            echo "Account created. Please log in.";
-                                    } else {
-                                        echo "<div class='text-danger pb-4'>";
-                                            echo "Error creating account. Please try a new username.";
-                                    }
-                                } else {
-                                    echo "<div class='text-danger pb-4'>";
-                                        if (!$usernameIsValid) echo "Invalid username.";
-                                        if (!$passwordIsValid) echo "Invalid password.";
-                                        if (!$ageIsValid) echo "Invalid age. You must be at least 13.";
-                                }
-                                echo "</div>";
-                            }
-                        ?>
                         <form method="POST" action="create_account.php" class="d-flex justify-content-center flex-column">
                             <div class="row pb-3 justify-content-center">
+                                <?php
+                                    if (userIsLoggedIn()) {
+                                        echo "<p>";
+                                        echo    "Hello " . get("username");
+                                        echo "</p>";
+                                    } else if ($formWasSubmitted) {
+                                        if ($usernameIsValid and $passwordIsValid and $ageIsValid) {
+                                            if ($db_call_successful) {
+                                                echo "<div class='text-success pb-4'>";
+                                                    echo "Account created. Please log in.";
+                                            } else {
+                                                echo "<div class='text-danger pb-4'>";
+                                                    echo "Error creating account. Please try a new username.";
+                                            }
+                                        } else {
+                                            echo "<div class='text-danger pb-4'>";
+                                                if (!$usernameIsValid) echo "Invalid username.";
+                                                if (!$passwordIsValid) echo "Invalid password.";
+                                                if (!$ageIsValid) echo "Invalid age. You must be at least 13.";
+                                        }
+                                        echo "</div>";
+                                    }
+                                ?>
+                            </div>
+                            <div class="row pb-3 justify-content-center">
                                 <label for="username" class="col-sm-3 text-md-left text-center">Username:</label>
-                                <input type="text" name="username" class="col-5" required>
+                                <input type="text" name="username" class="col-5" pattern='[a-z0-9]{5,}' title='(5 or more characters; alphanumeric only)' required>
                                 <small class="text-info col-md text-md-left text-center">(Must be at least five digits; numbers and letters only)</small>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_password" class="col-sm-3 text-md-left text-center">Password:</label>
-                                <input type="password" name="user_password" class="col-5" required>
+                                <input type="password" name="user_password" class="col-5" pattern='\S{8,}' title='(8 or more characters; alphanumeric only)' required>
                                 <small class="text-info col-md text-md-left text-center">(Must be at least 8 characters)</small>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_password_confirm" class="col-sm-3 text-md-left text-center">Confirm password:</label>
-                                <input type="password" name="user_password_confirm" class="col-5" required>
+                                <input type="password" name="user_password_confirm" class="col-5" pattern='\S{8,}' title='(8 or more characters; alphanumeric only)' required>
+                                <small class="text-info col-md text-md-left text-center"></small>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_email" class="col-sm-3 text-md-left text-center">Email:</label>
                                 <input type="email" name="user_email" class="col-5">
+                                <small class="text-info col-md text-md-left text-center"></small>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_firstname" class="col-sm-3 text-md-left text-center">First name:</label>
-                                <input type="text" name="user_firstname" class="col-5">
+                                <input type="text" name="user_firstname" class="col-5" pattern='[A-Z][a-z]+' title='Letters only. Proper capitalization please.'>
+                                <small class="text-info col-md text-md-left text-center"></small>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_lastname" class="col-sm-3 text-md-left text-center">Last name:</label>
-                                <input type="text" name="user_lastname" class="col-5">
+                                <input type="text" name="user_lastname" class="col-5" pattern='[A-Z][a-z]+' title='Letters only. Proper capitalization please.'>
+                                <small class="text-info col-md text-md-left text-center"></small>
                             </div>
                             <div class="row pb-3 justify-content-center">
                                 <label for="user_age" class="col-sm-3 text-md-left text-center">Age</label>
