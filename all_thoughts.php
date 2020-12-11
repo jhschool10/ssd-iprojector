@@ -12,9 +12,6 @@
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
         <link rel="stylesheet" href="./libraries/animate.min.css"/>
         <style>
-            .thought-container:hover {
-                background-color: rgba(0, 123, 255, 0.05);
-            }
         </style>
     </head>
     <body class='bg-light'>

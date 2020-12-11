@@ -193,6 +193,12 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
 
         const $row1 = $("<div>")
                         .addClass("CLICKABLE-thought d-flex border-bottom pt-2 pr-2 pb-0")
+                        .mouseenter(function() {
+                            $(this).css("background-color", "rgba(23, 162, 184, 0.1)")
+                        })
+                        .mouseleave(function() {
+                            $(this).css("background-color", "white")
+                        });
         $($thoughtContainer).append($row1);
 
             const $textContainer = $("<div>")

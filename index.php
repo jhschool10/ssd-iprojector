@@ -17,7 +17,7 @@
                 .jh-height {
                     height: 100vh;
                 }
-                #image {
+                #content_image {
                     background-position: right;
                     background-size: auto 100%;
                 }
@@ -26,18 +26,26 @@
                 .jh-height {
                     height: 50vh;
                 }
-                #image {
+                #content {
+                    flex-direction: column-reverse;
+                }
+                #content_image {
                     background-size: 100% auto;
                     background-position: right center;
                 }
             }
-            @media screen and (max-width: 719px) { /* to fix background image */
-                #image {
-                    background-position: right;
-                    background-size: auto 100%;
+            @media screen and (max-width: 719px) { /* sm and below */
+                #content_text {
+                    height: 65vh;
+                    padding: 1em;
+                }
+                #content_image {
+                    background-position: center top;
+                    background-size: cover;
+                    height: 35vh;
                 }
             }
-            #image {
+            #content_image {
                 background-image: url("./images/monkey-mirror.jpg");
             }
             p:first-of-type {
@@ -58,11 +66,11 @@
         </style>
     </head>
     <body>
-        <div class="container-fluid jh-height animate__animated animate__fadeIn animate__delay-1s" id="container">
-            <div class="row">
-                <div class="col-lg jh-height bg-primary p-0 m-0" id="image">
+        <div class="container-fluid jh-height animate__animated animate__fadeIn animate__delay-1s w-100" id="container">
+            <div class="row" id="content">
+                <div class="col-lg jh-height bg-primary p-0 m-0" id="content_image">
                 </div>
-                <div class="col-lg jh-height row justify-content-center align-items-center p-0 m-0" id="content">
+                <div class="col-lg jh-height row justify-content-center align-items-center p-md-0 m-0" id="content_text">
                     <div class="">
                         <h1 class="font-weight-bold ">iProjector</h1>
                         <h2>a new way to look at yourself</h2>
@@ -73,7 +81,7 @@
                         <p>and that's what it's all about.</p>
                         <div class="row">
                             <a href="./log_in.php" class="col p-2 text-center rounded-pill mr-1 bg-secondary text-white">Log in</a>
-                            <a href="./create_account.php" class=" col p-2 text-center rounded-pill bg-primary text-white">Create account</a>
+                            <a href="./create_account.php" class="col p-2 text-center rounded-pill bg-primary text-white">Create account</a>
                         </div>
                     </div>
                 </div>

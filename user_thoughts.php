@@ -31,9 +31,6 @@
                     box-shadow: 0.25em 0.25em 0.5em 0 black;
                     transform: translateX(0.5em) translateY(0.5em);
                 }
-            .thought-container:hover {
-                background-color: rgba(0, 123, 255, 0.05);
-            }
         </style>
     </head>
     <body class='bg-light'>
