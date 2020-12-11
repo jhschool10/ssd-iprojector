@@ -4,8 +4,6 @@
 
     session_start();
 
-    $last_login = "";
-
     $formWasSubmitted = count($_POST) != 0;
     if (!userIsLoggedIn() && $formWasSubmitted) {
 
@@ -38,8 +36,7 @@
                 $user_info = $statement->fetch();
 
                 if (password_verify($user_password, $user_info["hash_pass"])) {
-                    logUserIn($user_info["id"], $username);
-                    $last_login = "You last logged in: " . $user_info["last_login"];
+                    logUserIn($user_info["id"], $username, $user_info["last_login"]);
                 }
             }
         }
@@ -48,7 +45,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Log in? Log in!</title>
+        <title>
+            <?php 
+            if (userIsLoggedIn()) {
+                echo "Logged in as: " . get("username");
+            } else {
+                echo "Log in? Log in!";
+            }
+            ?>
+        </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
@@ -110,9 +115,12 @@
                     if (userIsLoggedIn()) { // Successful login
                         // LANDING PAGE
                         echo "<section class='d-flex flex-column mt-2 p-4 w-100 bg-white rounded shadow text-center'>";
+                            echo "<p>Your last login was: " . get("last_login") . "</p>";
                             echo "<h2 class='display-4'>Instructions</h2>";
-                            echo "<p class='lead'>Record a thought.</p>";
-                            echo "<p class='lead'>When you get tired of it project it onto another user.</p>";
+                            echo "<p class='lead'>This is a random thought:</p>";
+                            echo "<div id='random_thought' class='text-center'></div>";
+                            echo "<p class='lead'>You can record your own thoughts.</p>";
+                            echo "<p class='lead'>When you get tired of them, project them onto other users.</p>";
                             echo "<p class='lead'>But be careful.</p>";
                             echo "<p class='lead'>You'll get one of their thoughts in return.</p>";
                             echo "<p class='lead'>Click a thought to get more information about it.</p>";
@@ -162,6 +170,8 @@
             if (userIsLoggedIn()) {
                 echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
                 echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
+                echo "<script src='./js_scripts/log_in.js'></script>";
+                echo "<script src='./js_scripts/functions.js'></script>";
             }
         ?>
     </body>

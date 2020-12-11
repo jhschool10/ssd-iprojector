@@ -50,9 +50,14 @@
                         } else {
                             echo "<form id='record_thought' class='justify-content-center'>";
                                 echo "<div class='d-flex justify-content-center'>";
-                                    echo "<div class='w-75 row align-items-end'>";
+                                    echo "<div class='w-100 row align-items-end'>";
                                         echo "<label for='thought_text' class='col-2 display-4 mb-0'>I...</label>";
-                                        echo "<input type='text' id='thoughtTxt' name='thought_text' class='col border-top-0 border-left-0 form-control-lg border-right-0 lead mb-2' id='thought_text' placeholder='have a thought and wanna share it' required>";
+                                        echo "<input    type='text'
+                                                        id='thoughtTxt'
+                                                        name='thought_text'
+                                                        class='col border-top-0 border-left-0 form-control-lg border-right-0 lead mb-2'
+                                                        placeholder='have a thought and wanna share it'
+                                                        required>";
                                     echo "</div>";
                                 echo "</div>";
                                 echo "<div class='d-flex justify-content-center w-100'>";

@@ -1,28 +1,32 @@
 <?php
     function get($command) {
 
-        $value = "";
+        $output = "";
         switch ($command) {
             case "user_id":
-                $value = $_SESSION["user_id"];
+                $output = $_SESSION["user_id"];
                 break;
             case "username":
-                $value = $_SESSION["username"];
+                $output = $_SESSION["username"];
+                break;
+            case "last_login":
+                $output = $_SESSION["last_login"];
                 break;
         }
 
-        return $value;
+        return $output;
     }
 
     function userIsLoggedIn() {
         return isset($_SESSION["user_id"]);
     }
 
-    function logUserIn($id, $username) {
+    function logUserIn($id, $username, $last_login) {
         include("./php_scripts/connect_to_db.php");
 
         $_SESSION["user_id"] = $id;
         $_SESSION["username"] = $username;
+        $_SESSION["last_login"] = $last_login;
 
         $command = "UPDATE users SET last_login = current_timestamp() WHERE id = ?";
         $statement = $dbh->prepare($command);
