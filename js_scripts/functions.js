@@ -153,32 +153,35 @@ async function getThoughtHistory(thought_id) {
         .then(result => result.json())
         .then(projectionRecords => projectionRecords);
 }
-function parseThoughtHistory($targetContainer, projectionRecords) {
+function createThoughtHistory($targetContainer, projectionRecords) {
     $($targetContainer).html("")
-                        .addClass("bg-white rounded shadow-small p-2")
+                        .addClass("bg-white rounded shadow-small p-2 align-self-left")
                         .css("box-shadow", "0 0 5px 5px rgba(0, 0, 0, 0.03) inset")
                         .css("overflow-x", "visible")
                         .attr("data-isFilled", "true");
     
     const levelWidth = 15;
-    let level = 1;
-    for (record of projectionRecords) {
+    for (let i = 0; i < projectionRecords.length; i++) {
+        const record = projectionRecords[i];
         
         let $users = $("<small>")
-                        .html(
-                            "&rdsh; " + record["old_owner_username"]
-                            )
-                        .attr("title", "Projection date: " + record["trade_date"])
-                        .addClass("d-block")
-                        .css("margin-left", (levelWidth * level) + "px");
+                        .attr("title", "Projection date: " + formatDate(record["trade_date"]))
+                        .addClass("d-block text-left")
+                        .css("margin-left", (levelWidth * (i + 1)) + "px");
+
+        if (i < projectionRecords.length - 1) {
+            $users.html("&#9756; " + record["old_owner_username"]);
+        } else {
+            $users.html("&bigodot; " + record["old_owner_username"]);
+        }
+
         $($targetContainer).append($users);
-        level++;
     }
 }
 function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
     const $thoughtContainer = $("<div>")
                         .attr("data-id", thought["thought_id"]) // for finding this particular thought
-                        .addClass("thought-container mb-2 p-2 shadow border rounded");
+                        .addClass("thought-container mb-3 shadow border rounded");
 
     if (isAnimated) { // Will animate the drawing of the thought to the screen (for when new thoughts are added by a user)
         // Timeout is necessary re: https://stackoverflow.com/questions/24148403/trigger-css-transition-on-appended-element
@@ -189,99 +192,110 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
     }
 
         const $row1 = $("<div>")
-                        .addClass("CLICKABLE-thought d-flex border-bottom p-2");
+                        .addClass("CLICKABLE-thought d-flex border-bottom pt-2 pr-2 pb-0")
         $($thoughtContainer).append($row1);
 
-            if (isUserThought) {
-                const $projectBtn = $("<button>")
-                                        .html("&target; Project")
-                                        .addClass("align-self-top btn btn-outline-primary btn-sm mr-3")
-                                        .on("click", function() {
-                                            const loggedInUser = thought["current_owner"];
-                                            projectThought(loggedInUser, thought["thought_id"])
-                                                .then(function(status) {
-                                                    if (status.success) {
-                                                        const thoughts = status.message;
-                                                        let userNewThought, userOldThought;
-                                                        if (thoughts[0]["new_owner_id"] == loggedInUser) {
-                                                            userNewThought = thoughts[0];
-                                                            userOldThought = thoughts[1];
-                                                        } else {
-                                                            userNewThought = thoughts[1];
-                                                            userOldThought = thoughts[0];
-                                                        }
-                                                        showProjectionVisual(userOldThought, userNewThought)
-                                                            .then(() => { replaceThought($thoughtContainer, userNewThought["thought_id"]) });
-                                                    }
-                                                })
-                                        });
-                $($row1).append($projectBtn);
-            }
-
             const $textContainer = $("<div>")
-                                    .addClass("d-flex align-self-stretch align-content-center w-100")
+                                    .addClass("d-flex align-self-end w-100 justify-content-left")
                                     .css("cursor", "pointer")
                                     .on("click", function() {
-                                        $targetRow = $($row2);
+                                        $targetRow = $row2;
                                         if ($targetRow.attr("data-isFilled") === "false") {
                                             const thought_id = thought["thought_id"];
                                             getThoughtHistory(thought_id)
                                                 .then(projectionRecords => {
-                                                    parseThoughtHistory($($row2), projectionRecords);
+                                                    createThoughtHistory($($targetRow), projectionRecords);
                                                 });
-                                            $targetRow.attr("data-isFilled", "true");
+                                            $($targetRow).attr("data-isFilled", "true");
                                         } else {
-                                            $targetRow.html("");
-                                            $targetRow.attr("data-isFilled", "false");
+                                            $($targetRow).html("")
+                                                        .attr("data-isFilled", "false");
                                         }
                                         
                                     });
             $($row1).append($textContainer);
 
-                const $initial = $("<h2>")
+                const $avatar = $("<div>")
                                 .html("I... ")
-                                .addClass("pl-3 mr-3 border-left");
-                $($textContainer).append($initial);
+                                .addClass("d-flex mb-0 mr-3 pl-3 pb-0 h4 align-self-end align-items-end text-white")
+                                .css("background-image", "url('./images/icon_avatar.png')")
+                                .css("background-position", "left bottom")
+                                .css("background-size", "60px 60px")
+                                .css("background-repeat", "no-repeat")
+                                .css("min-width", "60px")
+                                .css("min-height", "60px");;
+                $($textContainer).append($avatar);
                     
 
                 const $text = $("<p>")
                                 .html(thought["thought_text"])
-                                .addClass("font-italic");
+                                .addClass("font-italic align-self-center m-0 p-0");
                 $($textContainer).append($text);
         
         const $row2 = $("<div>")
-                        .addClass("w-100 mt-2")
+                        .addClass("w-100 h-0")
                         .attr("data-isFilled", "false");
         $($thoughtContainer).append($row2);
 
 
         const $row3 = $("<div>")
-                        .addClass("row button justify-content-between align-items-center ml-2 mr-2 pt-2");
+                        .addClass("row button justify-content-between align-items-center ml-1 mr-1 pb-3 pt-3");
         $($thoughtContainer).append($row3);
 
-            const $huzzahBtn = $("<input>")
-                                .attr("type", "button")
-                                .attr("data-id", thought["thought_id"])
-                                .val("Huzzah This Thought!")
-                                .addClass("CLICKABLE-huzzah col-md btn btn-info btn-sm")
-                                .on("click", function() {
-                                    $(this).prop("disabled", true);
-                                    const thoughtID = thought["thought_id"];
-                                    fetch("./php_scripts/huzzah.php?thought_id=" + thoughtID)
-                                        .then(response => response.json())
-                                        .then(status => {
-                                            if (status.success) {
-                                                let numHuzzahsEle = $(this).next().children().first();
-                                                numHuzzahsEle.html(parseInt(numHuzzahsEle.html()) + 1);
-                                            }
-                                        })
+            const $buttons = $("<div>")
+                                .addClass("col-md d-flex");
+            $($row3).append($buttons);
 
-                                    $thisHuzzahBtn = $(this); // can't use .bind() with jQuery objects
-                                    setTimeout(function() {
-                                        $thisHuzzahBtn.prop("disabled", false);
-                                    }, 1000);
-                                });
-            $($row3).append($huzzahBtn);
+                if (isUserThought) {
+                    const $projectBtn = $("<button>")
+                                            .html("&#9755; Project")
+                                            .addClass("btn btn-success btn-sm mr-2")
+                                            .on("click", function() {
+                                                const loggedInUser = thought["current_owner"];
+                                                projectThought(loggedInUser, thought["thought_id"])
+                                                    .then(function(status) {
+                                                        if (status.success) {
+                                                            const thoughts = status.message;
+                                                            let userNewThought, userOldThought;
+                                                            if (thoughts[0]["new_owner_id"] == loggedInUser) {
+                                                                userNewThought = thoughts[0];
+                                                                userOldThought = thoughts[1];
+                                                            } else {
+                                                                userNewThought = thoughts[1];
+                                                                userOldThought = thoughts[0];
+                                                            }
+                                                            showProjectionVisual(userOldThought, userNewThought)
+                                                                .then(() => { replaceThought($thoughtContainer, userNewThought["thought_id"]) });
+                                                        }
+                                                    })
+                                            });
+                    $($buttons).append($projectBtn);
+                }
+
+                const $huzzahBtn = $("<button>")
+                                    .html("<img src='./images/huzzah.png' style='height: 20px; width: 20px;'> Huzzah!")
+                                    .attr("type", "button")
+                                    .attr("data-id", thought["thought_id"])
+                                    .attr("title", "It's not like anyone's gonna find out...")
+                                    .addClass("CLICKABLE-huzzah btn btn-warning text-white btn-sm")
+                                    .on("click", function() {
+                                        $(this).prop("disabled", true);
+                                        const thoughtID = thought["thought_id"];
+                                        fetch("./php_scripts/huzzah.php?thought_id=" + thoughtID)
+                                            .then(response => response.json())
+                                            .then(status => {
+                                                if (status.success) {
+                                                    let numHuzzahsEle = $(this).parent().next().children().first();
+                                                    numHuzzahsEle.html(parseInt(numHuzzahsEle.html()) + 1);
+                                                }
+                                            })
+
+                                        $thisHuzzahBtn = $(this); // can't use .bind() with jQuery objects
+                                        setTimeout(function() {
+                                            $thisHuzzahBtn.prop("disabled", false);
+                                        }, 1000);
+                                    });
+                $($buttons).append($huzzahBtn);
 
             const $huzzahNum = $("<div>")
                                 .addClass("col-md mt-1")
@@ -296,12 +310,12 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
             $($row3).append($huzzahNum);
 
             const $user = $("<small>")
-                            .html(" by <strong>" + thought["username"] + "</strong> (age " + thought["age"] + ")")
+                            .html("now in the head of <strong>" + thought["username"] + "</strong> (age " + thought["age"] + ")")
                             .addClass("col-md text-sm mr-2 mt-1");
             $($row3).append($user);
 
             const $date = $("<small>")
-                            .html("on <strong>" + thought["date_created"] + "</strong>")
+                            .html("born on <strong>" + formatDate(thought["date_created"]) + "</strong>")
                             .addClass("col-md text-sm mt-1");
             $($row3).append($date);
 
@@ -309,4 +323,18 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
 }
 function setNumThoughts() {
     $("#num_thoughts").html($("#thoughts_container").children().length);
+}
+function formatDate(datetime) {
+    const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+
+    let outputStr = "";
+    let date = new Date(datetime);
+
+    outputStr += months[date.getMonth()] + " ";
+    outputStr += date.getDate() + ", ";
+    outputStr += date.getFullYear() + " (";
+    outputStr += date.getHours() + ":";
+    outputStr += date.getMinutes() + ")";
+
+    return outputStr;
 }
