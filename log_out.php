@@ -31,34 +31,36 @@
             }
         </style>
     </head>
-    <body class='bg-light'>
-        <div class="container-fluid jh-height p-0 m-0">
-            <?php
-                include("./page_components/header.php");
-            ?>
-            <div class="jh-height justify-content-center align-items-center p-4 m-0 animate__animated animate__fadeOut animate__delay-5s">
-                
-                <section class="d-flex flex-column align-items-center mt-3 p-4 w-100 bg-white rounded shadow text-center">
-                    <h2 class="animate__animated animate__fadeOut animate__delay-2s">Goodbye</h2>
-                    <div class="w-100 mb-2 inline animate__animated animate__fadeOut animate__delay-3s">
-                        <?php
-                            if (userIsLoggedIn()) {
-                                echo "Username: " . get("username") . " wants to leave.";
+    <body class='bg-light d-flex flex-column w-100 justify-content-center'>
+        <?php
+            include("./page_components/header.php");
+        ?>
+        <div class="w-100 d-flex justify-content-center">
+            <div class="container-lg jh-height p-0 m-0">
+                <div class="jh-height justify-content-center align-items-center p-4 m-0 animate__animated animate__fadeOut animate__delay-5s">
+                    
+                    <section class="d-flex flex-column align-items-center mt-3 p-4 w-100 bg-white rounded shadow text-center">
+                        <h2 class="animate__animated animate__fadeOut animate__delay-2s">Goodbye</h2>
+                        <div class="w-100 mb-2 inline animate__animated animate__fadeOut animate__delay-3s">
+                            <?php
+                                if (userIsLoggedIn()) {
+                                    echo "Username: " . get("username") . " wants to leave.";
 
-                                if (!userIsLoggedIn()) {
-                                    echo "You've been logged out.";
+                                    if (!userIsLoggedIn()) {
+                                        echo "You've been logged out.";
+                                    } else {
+                                        echo "Uh oh, error logging out. I don't know how to fix this";
+                                    }
                                 } else {
-                                    echo "Uh oh, error logging out. I don't know how to fix this";
+                                    echo " You're logged out.";
                                 }
-                            } else {
-                                echo " You're logged out.";
-                            }
-                        ?>
-                    </div>
-                    <div class="w-50 d-flex align-items-center">
-                        <img src="./images/infinity_mirror.jpg" class="w-100 animate__animated animate__fadeOut animate__delay-4s">
-                    </div>
-                </section>
+                            ?>
+                        </div>
+                        <div class="w-50 d-flex align-items-center">
+                            <img src="./images/infinity_mirror.jpg" class="w-100 animate__animated animate__fadeOut animate__delay-4s">
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
         <?php

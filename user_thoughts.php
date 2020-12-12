@@ -33,52 +33,54 @@
                 }
         </style>
     </head>
-    <body class='bg-light'>
-        <div class="container-fluid p-0 m-0">
-            <?php
-                include("./page_components/header.php");
-            ?>
-            <div class="justify-content-center align-items-center p-4 m-0">
-                <div class="justify-content-center align-items-center p-4 m-0 h-100 w-100 bg-white border rounded shadow">
-                    <div id="success_message" class="text-center mb-2 text-danger"></div>
-                    <?php
-                        if (!userIsLoggedIn()) {
-                            echo "<p>You need to be logged in.</p>";
-                        } else {
-                            echo "<form id='record_thought' class='justify-content-center'>";
-                                echo "<div class='d-flex justify-content-center'>";
-                                    echo "<div class='w-100 row align-items-end'>";
-                                        echo "<label for='thought_text' class='col-2 display-4 mb-0'>I...</label>";
-                                        echo "<input    type='text'
-                                                        id='thoughtTxt'
-                                                        name='thought_text'
-                                                        class='col border-top-0 border-left-0 form-control-lg border-right-0 lead mb-2'
-                                                        placeholder='have a thought and wanna share it'
-                                                        required>";
+    <body class='bg-light d-flex flex-column w-100 justify-content-center'>
+        <?php
+            include("./page_components/header.php");
+        ?>
+        <div class="w-100 d-flex justify-content-center">
+            <div class="container-lg jh-height p-0 m-0">
+                <div class="justify-content-center align-items-center p-4 m-0">
+                    <div class="justify-content-center align-items-center p-4 m-0 h-100 w-100 bg-white border rounded shadow">
+                        <div id="success_message" class="text-center mb-2 text-danger"></div>
+                        <?php
+                            if (!userIsLoggedIn()) {
+                                echo "<p>You need to be logged in.</p>";
+                            } else {
+                                echo "<form id='record_thought' class='justify-content-center'>";
+                                    echo "<div class='d-flex justify-content-center'>";
+                                        echo "<div class='w-100 row align-items-end'>";
+                                            echo "<label for='thought_text' class='col-2 display-4 mb-0'>I...</label>";
+                                            echo "<input    type='text'
+                                                            id='thoughtTxt'
+                                                            name='thought_text'
+                                                            class='col border-top-0 border-left-0 form-control-lg border-right-0 lead mb-2'
+                                                            placeholder='have a thought and wanna share it'
+                                                            required>";
+                                        echo "</div>";
                                     echo "</div>";
-                                echo "</div>";
-                                echo "<div class='d-flex justify-content-center w-100'>";
-                                    echo "<input type='submit' class='m-4 bg-danger text-white' value='Submit' id='submit_button'>";
-                                echo "</div>";
-                            echo "</form>";
-                        }
-                    ?>
-                </div>
-                <div class="p-4 m-0 mt-4 h-100 w-100 bg-white border rounded shadow">
-                    <h2 class="mb-4"><?= get("username"); ?>'s thoughts (<span id="num_thoughts"></span>)</h2>
-                    <div id="thoughts_container" class="d-flex flex-column">
-                            
+                                    echo "<div class='d-flex justify-content-center w-100'>";
+                                        echo "<input type='submit' class='m-4 bg-danger text-white' value='Submit' id='submit_button'>";
+                                    echo "</div>";
+                                echo "</form>";
+                            }
+                        ?>
+                    </div>
+                    <div class="p-4 m-0 mt-4 h-100 w-100 bg-white border rounded shadow">
+                        <h2 class="mb-4"><?= get("username"); ?>'s thoughts (<span id="num_thoughts"></span>)</h2>
+                        <div id="thoughts_container" class="d-flex flex-column">
+                                
+                        </div>
                     </div>
                 </div>
+                <?php
+                    if (userIsLoggedIn()) {
+                        echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
+                        echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
+                        echo "<script src='./js_scripts/functions.js'></script>";
+                        echo "<script src='./js_scripts/user_thoughts.js'></script>";
+                    }
+                ?>
             </div>
-            <?php
-                if (userIsLoggedIn()) {
-                    echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
-                    echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
-                    echo "<script src='./js_scripts/functions.js'></script>";
-                    echo "<script src='./js_scripts/user_thoughts.js'></script>";
-                }
-            ?>
         </div>
     </body>
 </html>
