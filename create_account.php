@@ -79,6 +79,9 @@
             .jh-height-header {
                 height: 10vh;
             }
+            .jh-tick {
+                font-family: "Segoi UI Symbol";
+            }
         </style>
     </head>
     <body class='bg-light'>
@@ -90,7 +93,7 @@
                 <div class='h-100 w-100 bg-white border rounded shadow p-4' id='content_box'>
                     <h2 class="d-flex w-100 justify-content-center text-center pb-3">Create an account</h2>
                     <div class="row justify-content-center">
-                        <form method="POST" action="create_account.php" class="d-flex justify-content-center flex-column">
+                        <form method="POST" action="create_account.php" class="d-flex justify-content-center flex-column pl-3 pr-3 w-100">
                             <div class="row pb-3 justify-content-center">
                                 <?php
                                     if (userIsLoggedIn()) {
@@ -116,51 +119,117 @@
                                     }
                                 ?>
                             </div>
-                            <div class="row pb-3 justify-content-center">
-                                <label for="username" class="col-sm-3 text-md-left text-center">Username:</label>
-                                <input type="text" name="username" class="col-5" pattern='[a-z0-9]{5,}' title='(5 or more characters; alphanumeric only)' required>
-                                <small class="text-info col-md text-md-left text-center">(Must be at least five digits; numbers and letters only)</small>
+                            <div class="mb-1">
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-muted text-center" id="usernameTick">&#9744;</span>
+                                    <input  type="text"
+                                            name="username"
+                                            class="col-9"
+                                            pattern='[a-z0-9]{5,}'
+                                            title='(At least five digits; numbers and letters; lowercase)'
+                                            id="usernameTxt"
+                                            placeholder="Username (required)"
+                                            required>
+                                </div>
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-white text-center">&#9744;</span>
+                                    <small class="col-9">
+                                        <span id="usernameInstr">(At least five digits; numbers and letters; lowercase)</span>
+                                        <span class="text-danger d-none" id="usernameMsg">Username taken</span>
+                                    </small>
+                                </div>
                             </div>
-                            <div class="row pb-3 justify-content-center">
-                                <label for="user_password" class="col-sm-3 text-md-left text-center">Password:</label>
-                                <input type="password" name="user_password" class="col-5" pattern='\S{8,}' title='(8 or more characters; alphanumeric only)' required>
-                                <small class="text-info col-md text-md-left text-center">(Must be at least 8 characters)</small>
+                            <div class="mb-1">
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-muted text-center" id="passwordTick">&#9744;</span>
+                                    <input  type="password"
+                                            name="user_password"
+                                            class="col-9"
+                                            pattern='\S{8,}'
+                                            title='(At least 8 characters; no whitespace)'
+                                            id="passwordTxt"
+                                            placeholder="Password (required)"
+                                            required>
+                                </div>
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-white text-center">&#9744;</span>
+                                    <small class="col-9">
+                                        <span class="">(At least 8 characters; no whitespace)</span>
+                                    </small>
+                                </div>
                             </div>
-                            <div class="row pb-3 justify-content-center">
-                                <label for="user_password_confirm" class="col-sm-3 text-md-left text-center">Confirm password:</label>
-                                <input type="password" name="user_password_confirm" class="col-5" pattern='\S{8,}' title='(8 or more characters; alphanumeric only)' required>
-                                <small class="text-info col-md text-md-left text-center"></small>
+                            <div class="mb-1">
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-muted text-center" id="passwordConfirmTick">&#9744;</span>
+                                    <input  type="password"
+                                            name="user_password_confirm"
+                                            class="col-9"
+                                            pattern='\S{8,}'
+                                            title='(8 or more characters; alphanumeric only)'
+                                            id="passwordConfirmTxt"
+                                            placeholder="Confirm Password (required)"
+                                            required>
+                                </div>
                             </div>
-                            <div class="row pb-3 justify-content-center">
-                                <label for="user_email" class="col-sm-3 text-md-left text-center">Email:</label>
-                                <input type="email" name="user_email" class="col-5">
-                                <small class="text-info col-md text-md-left text-center"></small>
+                            <div class="mb-1">
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-white text-center" id="emailTick">&#9744;</span>
+                                    <input  type="email"
+                                            name="user_email"
+                                            class="col-9"
+                                            placeholder="email@website.com">
+                                </div>
                             </div>
-                            <div class="row pb-3 justify-content-center">
-                                <label for="user_firstname" class="col-sm-3 text-md-left text-center">First name:</label>
-                                <input type="text" name="user_firstname" class="col-5" pattern='[A-Z][a-z]+' title='Letters only. Proper capitalization please.'>
-                                <small class="text-info col-md text-md-left text-center"></small>
+                            <div class="mb-1">
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-white text-center" id="firstNameTick">&#9744;</span>
+                                    <input  type="text"
+                                            name="user_firstname"
+                                            class="col-9"
+                                            pattern='[A-Z][a-z]+'
+                                            placeholder="First name"
+                                            title='Letters only. Proper capitalization please.'>
+                                </div>
                             </div>
-                            <div class="row pb-3 justify-content-center">
-                                <label for="user_lastname" class="col-sm-3 text-md-left text-center">Last name:</label>
-                                <input type="text" name="user_lastname" class="col-5" pattern='[A-Z][a-z]+' title='Letters only. Proper capitalization please.'>
-                                <small class="text-info col-md text-md-left text-center"></small>
+                            <div class="mb-1">
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-white text-center" id="lastNameTick">&#9744;</span>
+                                    <input  type="text"
+                                            name="user_lastname"
+                                            class="col-9"
+                                            pattern='[A-Z][a-z]+'
+                                            placeholder="Last name"
+                                            title='Letters only. Proper capitalization please.'>
+                                </div>
                             </div>
-                            <div class="row pb-3 justify-content-center">
-                                <label for="user_age" class="col-sm-3 text-md-left text-center">Age</label>
-                                <input type="number" name="user_age" class="col-5" required>
-                                <small class="text-info col-md text-md-left text-center">(You must be over 13)</small>
+                            <div class="mb-1">
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-muted text-center" id="ageTick">&#9744;</span>
+                                    <input  type="number"
+                                            name="user_age"
+                                            class="col-9"
+                                            id="ageTxt"
+                                            placeholder="Age"
+                                            required>
+                                </div>
+                                <div class="form-row">
+                                    <span class="jh-tick col-2 h2 text-white text-center">&#9744;</span>
+                                    <small class="col-9">
+                                        <span class="">(You must be 13 or over)</span>
+                                    </small>
+                                </div>
                             </div>
-                            <div class="row justify-content-center">
-                                <div class="col-3"></div>
-                                <?php
-                                    if (userIsLoggedIn()) {
-                                        echo "<input type='submit' value='Please log out to create a new account.' id='btn-submit' class='col-5' disabled>";
-                                    } else {
-                                        echo "<input type='submit' value='Submit' id='btn-submit' class='col-5'>";
-                                    }
-                                ?>
-                                <div class="col-md"></div>
+                            <div class="mb-1">
+                                <div class="form-row">
+                                    <div class="col-2"></div>
+                                    <?php
+                                        if (userIsLoggedIn()) {
+                                            echo "<input class='col-9' type='submit' value='Please log out to create a new account.' id='submitBtn' disabled>";
+                                        } else {
+                                            echo "<input class='col-9' type='submit' value='Submit' id='submitBtn' disabled>";
+                                        }
+                                    ?>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -168,9 +237,11 @@
             </div>
         </div>
         <?php
+            echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
             if (userIsLoggedIn()) {
-                echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
                 echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
+            } else {
+                echo "<script src='./js_scripts/create_account.js'></script>";
             }
         ?>
     </body>
