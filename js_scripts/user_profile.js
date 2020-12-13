@@ -1,13 +1,20 @@
+/**
+ * This is the companion javascript to user_profile.php
+ * Author: Joseph Haley
+*/
 $("document").ready(function () {
 
-    /// true, false, "n/a"
+    // Variables
+    /**
+     * Keeps track of the status of any input entered by the user
+     */
     let conditionMet = {
-        password: "n/a",
-        passwordConfirm: "n/a",
-        email: "n/a",
-        firstname: "n/a",
-        lastname: "n/a",
-        age: "n/a",
+        password: "n/a", // true, false, "n/a"
+        passwordConfirm: "n/a", // true, false, "n/a"
+        email: "n/a", // true, false, "n/a"
+        firstname: "n/a", // true, false, "n/a"
+        lastname: "n/a", // true, false, "n/a"
+        age: "n/a", // true, false, "n/a"
     }
 
     // Init
@@ -150,9 +157,11 @@ $("document").ready(function () {
         conditionMet.lastname = isValid;
         setSubmitBtnState();
     })
-
+    /**
+     * Sets the submit button to disabled or not depending on the state of the conditionMet object
+     */
     function setSubmitBtnState() {
-        if (oldPasswordPresent()) { // Only bother verifying things if the old password is present
+        if ($("#oldPasswordTxt").val().length !== 0) { // Only bother verifying things if the old password is present
 
             let numTrue = 0, numFalse = 0, numNA = 0;
             for (const condition in conditionMet) {
@@ -176,8 +185,5 @@ $("document").ready(function () {
             $("#oldPasswordBox").addClass("alert-danger")
                                 .removeClass("alert-warning");
         }
-    }
-    function oldPasswordPresent() {
-        return $("#oldPasswordTxt").val().length !== 0;
     }
 });

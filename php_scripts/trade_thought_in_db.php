@@ -1,4 +1,9 @@
 <?php
+    /**
+     * Trades a thought with another thought in the database
+     * Author: Joseph Haley
+     */
+
     include("./connect_to_db.php");
     include("./tools.php");
 

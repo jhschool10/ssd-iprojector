@@ -1,4 +1,9 @@
 <?php
+    /**
+     * This web page lists all thoughts in the database
+     * Author: Joseph Haley
+     */
+
     include("./php_scripts/connect_to_db.php");
     include("./php_scripts/tools.php");
 

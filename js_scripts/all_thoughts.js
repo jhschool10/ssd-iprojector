@@ -1,25 +1,34 @@
-$("document").ready(function() {
-    // Init
-    $("#thoughts_container").html("");
+/**
+ * This is the companion javascript to all_thoughts.php
+ * Author: Joseph Haley
+*/
 
+$("document").ready(function() {
+    // Variables
+    /**
+     * Keeps track of user's chosen settings re: which and how thoughts should be listed
+     */
     let querySettings = { // initialized to default
         thought_set: "all", // One of: all, user, not_user
         orderBy: "date", // One of: date, huzzahs, username
         order: "asc", // One of: asc, desc, random
     }
 
-    getThoughts(querySettings.thought_set, querySettings.orderBy, querySettings.order, false)
+    // Init
+    $("#thoughts_container").html("");
+
+    getThoughts(querySettings.thought_set, querySettings.orderBy, querySettings.order)
         .then(thoughts => {
             for (const thought of thoughts) {
                 if (thought["user_id"] == this_user_id) {
-                    $("#thoughts_container").append(createThoughtDiv(thought, false, true));
+                    $("#thoughts_container").append(createThoughtEle(thought, false, true));
                 } else {
-                    $("#thoughts_container").append(createThoughtDiv(thought, false, false));
+                    $("#thoughts_container").append(createThoughtEle(thought, false, false));
                 }
             }
         })
         .then(function() {
-            setNumThoughts();
+            $("#num_thoughts").html(getNumThoughts());
         });
 
     // Listeners
@@ -66,14 +75,14 @@ $("document").ready(function() {
             $("#thoughts_container").html("");
             for (const thought of thoughts) {
                 if (thought["user_id"] == this_user_id) {
-                    $("#thoughts_container").append(createThoughtDiv(thought, false, true));
+                    $("#thoughts_container").append(createThoughtEle(thought, false, true));
                 } else {
-                    $("#thoughts_container").append(createThoughtDiv(thought, false, false));
+                    $("#thoughts_container").append(createThoughtEle(thought, false, false));
                 }
             }
         })
         .then(function() {
-            setNumThoughts();
+            $("#num_thoughts").html(getNumThoughts());
         });
     });
 });

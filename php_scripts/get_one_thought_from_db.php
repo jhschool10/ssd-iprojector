@@ -1,4 +1,9 @@
 <?php
+    /**
+     * Gets one thought from the database in JSON format
+     * Author: Joseph Haley
+     */
+
     include("./connect_to_db.php");
     include("./tools.php");
 

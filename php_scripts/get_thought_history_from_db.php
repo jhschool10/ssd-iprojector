@@ -1,4 +1,9 @@
 <?php
+    /**
+     * Gets a thought's trade history from the database in JSON format
+     * Author: Joseph Haley
+     */
+
     include("./connect_to_db.php");
     include("./tools.php");
 

@@ -1,3 +1,15 @@
+/**
+ * This is a collection of all the functions used on the website
+ * Author: Joseph Haley
+ */
+
+/**
+ * Gets thought records from the database
+ * @param {Enum - String} thoughtSet Which thoughts to get from the database (One of: all, user, not_user)
+ * @param {Enum - String} orderBy The attribute to sort the list by (One of: date, huzzahs, username)
+ * @param {Enum - String} order The order of the results (One of: asc, desc, random)
+ * @return {Array} of objects containing thought attributes
+ */
 async function getThoughts(thoughtSet, orderBy, order) {
     let url = "./php_scripts/get_thoughts_from_db.php?";
     
@@ -12,7 +24,11 @@ async function getThoughts(thoughtSet, orderBy, order) {
         .then(response => response.json())
         .then(result => result);
 }
-
+/**
+ * Gets one thought record from the database
+ * @param {Int} thought_id The id of the thought
+ * @return {Array} of one object containing thought attributes
+ */
 async function getOneThought(thought_id) {
     const url = "./php_scripts/get_one_thought_from_db.php?thought_id=" + thought_id;
 
@@ -20,8 +36,43 @@ async function getOneThought(thought_id) {
         .then(response => response.json())
         .then(result => result);
 }
-async function projectThought(user_id, thought_id) {
-    let url = "./php_scripts/project_thought_in_db.php?";
+/**
+ * Records a thought to the database and returns that new thought
+ * @param {String} text The text of the thought
+ */
+function recordThought(text) {
+    recordThoughtToDB(text)
+        .then(result => {
+            console.log(result.success);
+            if (result.success) {
+                $("#success_message").html("");
+                $("#thoughtTxt").val("");
+                
+                $("#thoughts_container").prepend(createThoughtEle(result.thought, true, true));
+            } else {
+                $("#success_message").html("Oops, there was a problem and the thought wasn't registered. Did you really have that thought?");
+            }
+        })
+        .then(function() {
+            $("#num_thoughts").html(getNumThoughts());
+        });
+    
+    function recordThoughtToDB(text) {
+        return fetch("./php_scripts/record_thought_to_db.php?thought_text=" + text)
+            .then(response => response.json())
+            .then(result => result);
+    }
+}
+
+/**
+ * Trades a user's thought with a random thought of another random user
+ * For this function to work, the user must be the owner of the thought being traded
+ * @param {Int} user_id The user_id of the current user who is trading a thought
+ * @param {Int} thought_id The thought_id of the thought being traded
+ * @return {Object {bool, Array[2]}} Object with two properties: "status" (bool) indicates whether the trade was successful; "message" returns an array of two objects containing the thought attributes of the two thoughts that were traded
+ */
+async function tradeThought(user_id, thought_id) {
+    let url = "./php_scripts/trade_thought_in_db.php?";
     url += "user_id=" + user_id; // the logged in user should be the current owner
     url += "&thought_id=" + thought_id;
 
@@ -29,14 +80,24 @@ async function projectThought(user_id, thought_id) {
         .then(result => result.json())
         .then(status => status);
 }
-function replaceThought(oldThought, newThoughtId) {
+/**
+ * Gets a thought from the database, creates a jQuery "thought element" and uses that to replace another jQuery thought element
+ * @param {jQuery object} $oldThought jQuery object containing one thought element
+ * @param {*} newThoughtId The ID of the new thought which will replace the other thought
+ */
+function replaceThought($oldThought, newThoughtId) {
     getOneThought(newThoughtId)
         .then(thought => {
             setTimeout(function() {
-                $(oldThought).replaceWith(createThoughtDiv(thought[0], true, true));
-            }, 4500)
+                $($oldThought).replaceWith(createThoughtEle(thought[0], true, true));
+            }, 4500) // allow time for showProjectionVisual to complete its animation
         });
 };
+/**
+ * Animates a thought trade
+ * @param {Object} oldThought Object that contains thought attributes
+ * @param {Object} newThought Object that contains thought attributes
+ */
 async function showProjectionVisual(oldThought, newThought) {
     const oldThoughtText = oldThought["thought_text"];
     const otherUser = oldThought["new_owner_username"] + " (age " + oldThought["new_owner_age"] + ")";
@@ -137,6 +198,7 @@ async function showProjectionVisual(oldThought, newThought) {
                                         }, 2000);
             $($visual).append($newThoughtText);
 
+    // Clears the DOM of the animation elements when the animation is over
     setTimeout(function() {
         $($visual)
             .animate({
@@ -148,37 +210,57 @@ async function showProjectionVisual(oldThought, newThought) {
         }, 500);
     }, 4500);
 }
+
+/**
+ * Gets an array of all trades a thought has been involved in
+ * @param {Int} thought_id The ID of the thought
+ * @return An array of Objects containing attributes regarding each trade the thought has been in
+ */
 async function getThoughtHistory(thought_id) {
     return fetch("./php_scripts/get_thought_history_from_db.php?thought_id=" + thought_id)
         .then(result => result.json())
-        .then(projectionRecords => projectionRecords);
+        .then(tradeRecords => tradeRecords);
 }
-function createThoughtHistory($targetContainer, projectionRecords) {
-    $($targetContainer).html("")
-                        .addClass("bg-white rounded shadow-small p-2 align-self-left")
+/**
+ * Creates a jQuery object containing one element listing all trades a thought has been in
+ * @param {jQuery Object} $targetContainer A jQuery object containing one element
+ * @param {Object} tradeRecords An array of Objects containing attributes relating to thought trades
+ */
+function createThoughtHistoryEle(tradeRecords) {
+    const $container = $("<div>").html("")
+                        .addClass("bg-white rounded shadow-small p-2 align-self-left w-100")
                         .css("box-shadow", "0 0 5px 5px rgba(0, 0, 0, 0.03) inset")
                         .css("overflow-x", "visible")
                         .attr("data-isFilled", "true");
     
     const levelWidth = 15;
-    for (let i = 0; i < projectionRecords.length; i++) {
-        const record = projectionRecords[i];
+    for (let i = 0; i < tradeRecords.length; i++) {
+        const record = tradeRecords[i];
         
         let $users = $("<small>")
                         .attr("title", "Projection date: " + formatDate(record["trade_date"]))
                         .addClass("d-block text-left")
                         .css("margin-left", (levelWidth * (i + 1)) + "px");
 
-        if (i < projectionRecords.length - 1) {
+        if (i < tradeRecords.length - 1) {
             $users.html("&#9756; " + record["old_owner_username"]);
         } else {
             $users.html("&bigodot; " + record["old_owner_username"]);
         }
 
-        $($targetContainer).append($users);
+        $($container).append($users);
     }
+    return $container;
 }
-function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
+
+/**
+ * Creates a "thought element" component
+ * @param {Object} thought An Object containing various attributes relating to a thought
+ * @param {*} isAnimated Whether the element will be animated when added to the DOM
+ * @param {*} isUserThought Whether the thought being created is owned by the current user
+ * @return A jQuery Object containing one "thought element"
+ */
+function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
     const $thoughtContainer = $("<div>")
                         .attr("data-id", thought["thought_id"]) // for finding this particular thought
                         .addClass("thought-container mb-3 shadow border rounded");
@@ -210,7 +292,7 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
                                             const thought_id = thought["thought_id"];
                                             getThoughtHistory(thought_id)
                                                 .then(projectionRecords => {
-                                                    createThoughtHistory($($targetRow), projectionRecords);
+                                                    $($targetRow).append(createThoughtHistoryEle(projectionRecords));
                                                 });
                                             $($targetRow).attr("data-isFilled", "true");
                                         } else {
@@ -252,13 +334,13 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
                                 .addClass("col-md d-flex");
             $($row3).append($buttons);
 
-                if (isUserThought) {
+                if (isUserThought) { // Add a Project button
                     const $projectBtn = $("<button>")
                                             .html("&#9755; Project")
                                             .addClass("btn btn-success btn-sm mr-2")
                                             .on("click", function() {
                                                 const loggedInUser = thought["current_owner"];
-                                                projectThought(loggedInUser, thought["thought_id"])
+                                                tradeThought(loggedInUser, thought["thought_id"])
                                                     .then(function(status) {
                                                         if (status.success) {
                                                             const thoughts = status.message;
@@ -327,9 +409,18 @@ function createThoughtDiv(thought, isAnimated = false, isUserThought = false) {
 
     return $thoughtContainer;
 }
-function setNumThoughts() {
-    $("#num_thoughts").html($("#thoughts_container").children().length);
+/**
+ * Gets the number of thoughts in a thought container
+ * @return The number of thoughts
+ */
+function getNumThoughts() {
+    return $("#thoughts_container").children().length;
 }
+/**
+ * Formats a datetime into a nicer format
+ * @param {String} datetime A datetime supplied by a MySQL database
+ * @return a nicely-formatted string containing a date and time
+ */
 function formatDate(datetime) {
     const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 
@@ -344,17 +435,35 @@ function formatDate(datetime) {
 
     return outputStr;
 }
-
+/**
+ * An object containing everything needed to verify various user inputs
+ */
 let verify = {
+    /**
+     * Icons used to indicate whether a user input is good, bad, or neutral
+     */
     icon: {
         empty: "&#9744;",
         checked: "&#9745;",
         exed: "&#9746;",
     },
+    /**
+     * Variable for containing a Timeout ID
+     */
     timer: undefined,
+    /**
+     * Gets whether a string is empty or not
+     * @param {String} str A string
+     * @return {boolean} Whether the string is empty or not
+     */
     isEmpty(str) {
         return str.length ===0;
     },
+    /**
+     * Determines whether a username meets criteria or not
+     * @param {String} username
+     * @return {Boolean}
+     */
     usernameValid(username) {
         let isValid = true;
 
@@ -364,6 +473,11 @@ let verify = {
 
         return isValid;
     },
+    /**
+     * Determines whether a password meets criteria or not
+     * @param {String} password 
+     * @return {Boolean}
+     */
     passwordValid: function(password) {
         let isValid = true;
 
@@ -373,6 +487,12 @@ let verify = {
 
         return isValid;
     },
+    /**
+     * Determines whether a "confirm password" string meets criteria or not
+     * @param {String} confirmPassword The "confirm password" string
+     * @param {String} password The password string
+     * @return {Boolean}
+     */
     confirmPasswordValid: function(confirmPassword, password) {
         let isValid = true;
 
@@ -380,6 +500,11 @@ let verify = {
 
         return isValid;
     },
+    /**
+     * Determines whether an age meets criteria or not
+     * @param {String} age 
+     * @return {Boolean}
+     */
     ageValid: function(age) {
         let isValid = true;
         
@@ -388,6 +513,11 @@ let verify = {
 
         return isValid;
     },
+    /**
+     * Determines whether an email meets criteria or not
+     * @param {String} email
+     * @return {Boolean}
+     */
     emailValid: function(email) {
         let isValid = true;
 
@@ -395,6 +525,11 @@ let verify = {
 
         return isValid;
     },
+    /**
+     * Determines whether a name (first or last or whatever) meets criteria or not
+     * @param {String} name 
+     * @return {Boolean}
+     */
     nameValid: function(name) {
         let isValid = true;
 
@@ -402,6 +537,12 @@ let verify = {
 
         return isValid;
     },
+    /**
+     * Sets the status of a user input field
+     * @param {jQuery object} $tickEle A single element which will display the status of an input
+     * @param {Enum - String} status Either "valid", "invalid", or "neutral"
+     * @param {*} requiredField Whether the input is for a required field or not
+     */
     setStatus: function($tickEle, status, requiredField = false) {
         switch (status) {
             case "valid":
@@ -428,6 +569,11 @@ let verify = {
         }
     }
 }
+/**
+ * Checks a username against all other usernames in the database and determines whether it is unique or not
+ * @param {String} username Username to be checked
+ * @return {Object} An object containing one property, indicating whether the username is unique or not
+ */
 async function verifyUniqueUsername(username) {
     return fetch("./php_scripts/is_username_unique.php?username=" + username)
         .then(result => result.json())

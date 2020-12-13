@@ -1,4 +1,9 @@
 <?php
+    /**
+     * Returns whether a username is unique or not in JSON format
+     * Author: Joseph Haley
+     */
+
     include("./connect_to_db.php");
 
     $output = [];

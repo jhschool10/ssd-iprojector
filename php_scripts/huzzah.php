@@ -1,4 +1,9 @@
 <?php
+    /**
+     * Increments a thought's "huzzah" attribute
+     * Author: Joseph Haley
+     */
+
     include("./connect_to_db.php");
     include("./tools.php");
 

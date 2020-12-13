@@ -1,4 +1,9 @@
 <?php
+    /**
+     * This web page allows a user to change information in their account
+     * Author: Joseph Haley
+     */
+    
     include("./php_scripts/tools.php");
     include("./php_scripts/connect_to_db.php");
 

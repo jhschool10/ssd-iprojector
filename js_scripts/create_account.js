@@ -1,5 +1,14 @@
+/**
+ * This is the companion javascript to create_account.php
+ * Author: Joseph Haley
+*/
+
 $("document").ready(function () {
 
+    // Variables
+    /**
+     * Keeps track of the status of any input entered by the user
+     */
     let conditionMet = {
         username: false, // true/false
         password: false, // true/false
@@ -11,6 +20,8 @@ $("document").ready(function () {
     }
 
     // Init
+
+    // Listeners
     $("#usernameTxt").keyup(function() {
         const $tick = $("#usernameTick");
         let userInput = $(this).val();
@@ -180,9 +191,10 @@ $("document").ready(function () {
         setSubmitBtnState();
     });
 
+    /**
+     * Sets the submit button to disabled or not depending on the state of the conditionMet object
+     */
     function setSubmitBtnState() {
-        console.log(conditionMet);
-
         let numFalse = 0;
         for (const condition in conditionMet) {
             let property = conditionMet[condition];

@@ -1,4 +1,9 @@
 <?php
+    /**
+     * Inserts a thought record into the thoughts table
+     * Author: Joseph Haley
+     */
+
     include("./connect_to_db.php");
     include("./tools.php");
 

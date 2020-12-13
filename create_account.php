@@ -1,4 +1,8 @@
 <?php
+    /**
+     * This page allows people to create a user account
+     * Author: Joseph Haley
+     */
     include("./php_scripts/tools.php");
     include("./php_scripts/connect_to_db.php");
 

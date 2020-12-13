@@ -1,4 +1,8 @@
 <?php
+    /**
+     * This page logs a user out of their session
+     * Author: Joseph Haley
+     */
     include("./php_scripts/tools.php");
 
     session_start();

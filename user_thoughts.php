@@ -1,4 +1,9 @@
 <?php
+    /**
+     * This page allows a user to record a thought
+     * Author: Joseph Haley
+     */
+    
     include("./php_scripts/connect_to_db.php");
     include("./php_scripts/tools.php");
 

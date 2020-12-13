@@ -1,4 +1,8 @@
 <?php
+    /**
+     * This is the index web page
+     * Author: Joseph Haley
+     */
     include("./php_scripts/tools.php");
     session_start();
 ?><!DOCTYPE html>

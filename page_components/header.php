@@ -1,4 +1,8 @@
 <?php
+    /**
+     * Creates the header for a webpage
+     * Author: Joseph Haley
+     */
 
     echo "<header class='row w-100 m-0 p-0 pb-2 border-bottom bg-white'>";
 
