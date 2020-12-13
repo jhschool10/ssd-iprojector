@@ -360,7 +360,7 @@ let verify = {
 
         if (username.length < 5) isValid = false;
 
-        if (username.search(/[^a-z0-9]/g) != -1) isValid = false;
+        if (username.search(/[^a-z0-9]/g) !== -1) isValid = false;
 
         return isValid;
     },
@@ -369,7 +369,7 @@ let verify = {
 
         if (password.length < 8) isValid = false;
         
-        if (password.search(/\s/g) != -1) { isValid = false; };
+        if (password.search(/\s/g) !== -1) isValid = false;
 
         return isValid;
     },
@@ -380,7 +380,7 @@ let verify = {
 
         return isValid;
     },
-    confirmAgeValid: function(age) {
+    ageValid: function(age) {
         let isValid = true;
         
         const ageParsed = parseInt(age);
@@ -388,7 +388,21 @@ let verify = {
 
         return isValid;
     },
-    setStatus: function($tickEle, status) {
+    emailValid: function(email) {
+        let isValid = true;
+
+        if (email.search(/[a-z_.0-9]+@[a-z]+[.][a-z]{2,10}/g) === -1) isValid = false;
+
+        return isValid;
+    },
+    nameValid: function(name) {
+        let isValid = true;
+
+        if (name.search(/^[A-Z][a-z]+$/) === -1) { isValid = false };
+
+        return isValid;
+    },
+    setStatus: function($tickEle, status, requiredField = false) {
         switch (status) {
             case "valid":
                 $($tickEle).html(verify.icon.checked)
@@ -401,9 +415,15 @@ let verify = {
                         .removeClass("text-success text-muted");
                 break;
             case "neutral":
-                $($tickEle).html(verify.icon.empty)
+                if (requiredField) {
+                    $($tickEle).html(verify.icon.empty)
                     .addClass("text-muted")
                     .removeClass("text-success text-warning");
+                } else {
+                    $($tickEle).html(verify.icon.empty)
+                    .addClass("text-white")
+                    .removeClass("text-success text-warning");
+                }
                 break;
         }
     }

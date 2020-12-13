@@ -102,7 +102,7 @@ $("document").ready(function () {
             verify.setStatus($tick, "neutral");
             isValid = false;
         } else {
-            isValid = verify.confirmAgeValid(userInput)
+            isValid = verify.ageValid(userInput)
 
             if (isValid) {
                 verify.setStatus($tick, "valid");
