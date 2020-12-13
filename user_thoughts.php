@@ -40,11 +40,13 @@
         <div class="w-100 d-flex justify-content-center">
             <div class="container-lg jh-height p-0 m-0">
                 <div class="justify-content-center align-items-center p-4 m-0">
+
+                    <!-- SECTION: Record thought box -->
                     <div class="justify-content-center align-items-center p-4 m-0 h-100 w-100 bg-white border rounded shadow">
                         <div id="success_message" class="text-center mb-2 text-danger"></div>
                         <?php
                             if (!userIsLoggedIn()) {
-                                echo "<p>You need to be logged in.</p>";
+                                echo "<p>You need to be logged in to see a user's thoughts.</p>";
                             } else {
                                 echo "<form id='record_thought' class='justify-content-center'>";
                                     echo "<div class='d-flex justify-content-center'>";
@@ -65,12 +67,18 @@
                             }
                         ?>
                     </div>
-                    <div class="p-4 m-0 mt-4 h-100 w-100 bg-white border rounded shadow">
-                        <h2 class="mb-4"><?= get("username"); ?>'s thoughts (<span id="num_thoughts"></span>)</h2>
-                        <div id="thoughts_container" class="d-flex flex-column">
-                                
-                        </div>
-                    </div>
+
+                    <!-- SECTION: List user's thoughts box -->
+                    <?php
+                        if (userIsLoggedIn()) {
+                            echo "<div class='p-4 m-0 mt-4 h-100 w-100 bg-white border rounded shadow'>";
+                                echo "<h2 class='mb-4'><?= get('username'); ?>'s thoughts (<span id='num_thoughts'></span>)</h2>";
+                                echo "<div id='thoughts_container' class='d-flex flex-column'>";
+                                    
+                                echo "</div>";
+                            echo "</div>";
+                        }
+                    ?>
                 </div>
                 <?php
                     if (userIsLoggedIn()) {

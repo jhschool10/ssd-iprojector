@@ -21,8 +21,9 @@
         <div class="w-100 d-flex justify-content-center">
             <div class="container-lg jh-height p-0 m-0">
                 <div class="row flex-column justify-content-center align-items-center p-4 m-0">
+
+                    <!-- SECTION: Options box -->
                     <div class="pt-3 pr-4 pb-4 pl-4 m-0 mb-4 h-100 w-100 bg-white border rounded shadow">
-                        <!-- Options -->
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <?php
                                 if (!userIsLoggedIn()) {
@@ -79,16 +80,22 @@
                             ?>
                         </div>
                     </div>
-                    <div class="p-4 mb-4 h-100 w-100 bg-white border rounded shadow">
-                        <h2 class="mb-4">Thoughts (<span id="num_thoughts"></span>)</h2>
-                        <div id="thoughts_container"></div>
-                    </div>
+
+                    <!-- SECTION: Thoughts box -->
+                    <?php
+                        if (userIsLoggedIn()) {
+                            echo "<div class='p-4 mb-4 h-100 w-100 bg-white border rounded shadow'>";
+                                echo "<h2 class='mb-4'>Thoughts (<span id='num_thoughts'></span>)</h2>";
+                                echo "<div id='thoughts_container'></div>";
+                            echo "</div>";
+                        }
+                    ?>
                 </div>
             </div>
         </div>
         <?php
             if (userIsLoggedIn()) {
-                echo "<script>const this_user_id = " . get("user_id") . ";</script>";
+                echo "<script>const this_user_id = " . get("user_id") . ";</script>"; // need to access this variable in javascript
                 echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
                 echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
                 echo "<script src='./js_scripts/functions.js'></script>";
