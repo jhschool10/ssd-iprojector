@@ -90,7 +90,7 @@
         ?>
         <div class="w-100 d-flex justify-content-center">
             <div class="container-lg jh-height p-0 m-0">
-                <div class="jh-height justify-content-center align-items-center p-4 m-0">
+                <div class="justify-content-center align-items-center p-4 m-0">
                     <div class='h-100 w-100 bg-white border rounded shadow p-4' id='content_box'>
                         <h2 class="d-flex w-100 justify-content-center text-center pb-3">Create an account</h2>
                         <div class="row justify-content-center">
@@ -206,7 +206,7 @@
                                 <div class="mb-1">
                                     <div class="form-row">
                                         <span class="jh-tick col-2 h2 text-muted text-center" id="ageTick">&#9744;</span>
-                                        <input  type="number"
+                                        <input  type="text"
                                                 name="user_age"
                                                 class="col-9"
                                                 id="ageTxt"
@@ -243,6 +243,7 @@
             if (userIsLoggedIn()) {
                 echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
             } else {
+                echo "<script src='./js_scripts/functions.js'></script>";
                 echo "<script src='./js_scripts/create_account.js'></script>";
             }
         ?>

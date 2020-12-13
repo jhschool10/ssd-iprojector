@@ -1,173 +1,125 @@
 $("document").ready(function () {
 
-    let valid = {
+    let conditionMet = {
         username: false,
         password: false,
         passwordConfirm: false,
         age: false,
     }
-    let verifyUsernameTimer = undefined;
-    let icon = {
-        empty: "&#9744;",
-        checked: "&#9745;",
-        exed: "&#9746;",
-    }
 
     // Init
-
     $("#usernameTxt").keyup(function() {
         const $tick = $("#usernameTick");
         let userInput = $(this).val();
-        let fails = false;
-        clearTimeout(verifyUsernameTimer);
+        let isValid = false;
+        clearTimeout(verify.timer);
 
-        if (userInput.length === 0) {
-            $($tick).html(icon.empty)
-                        .addClass("text-muted")
-                        .removeClass("text-success text-warning");
+        if (verify.isEmpty(userInput)) {
+            verify.setStatus($tick, "neutral");
+            isValid = false;
         } else {
-            if (userInput.length < 5) {
-                fails = true;
-            }
+            isValid = verify.usernameValid(userInput);
 
-            if (userInput.search(/[^a-z0-9]/g) != -1) fails = true;
-
-            if (fails) {
-                $($tick).html(icon.exed)
-                            .addClass("text-warning")
-                            .removeClass("text-success text-muted");
-                valid.username = false;
-            } else {
+            if (isValid) {
                 // Finally: check uniqueness of username
-                verifyUsernameTimer = setTimeout(function() {
+                this.timer = setTimeout(function() {
                     verifyUniqueUsername(userInput)
                         .then(result => {
                             if (result.success) {
-                                $($tick).html(icon.checked)
-                                        .addClass("text-success")
-                                        .removeClass("text-warning text-muted");
+                                isValid = true;
+                                verify.setStatus($tick, "valid");
                                 $("#usernameMsg").addClass("d-none")
                                                     .removeClass("d-inline");
                                 $("#usernameInstr").addClass("d-inline")
                                                     .removeClass("d-none");
-                                valid.username = true; 
                             } else {
-                                $($tick).html(icon.exed)
-                                        .addClass("text-warning")
-                                        .removeClass("text-success text-muted");
-                                $("#usernameMsg").addClass("d-inline")
+                                isValid = false;
+                                verify.setStatus($tick, "invalid");
+                                $($("#usernameMsg")).addClass("d-inline")
                                                     .removeClass("d-none");
                                 $("#usernameInstr").addClass("d-none")
                                                     .removeClass("d-inline");
-                                valid.username = false; 
                             }
                         });
-                }, 300);
+                }.bind(this), 300);
+            } else {
+                verify.setStatus($tick, "invalid");
             }
         }
-
+        conditionMet.username = isValid;
         setSubmitBtnState();
     });
+    // HERE
     $("#passwordTxt").keyup(function() {
         const $tick = $("#passwordTick");
         const userInput = $(this).val();
-        let fails = false;
+        let isValid = false;
         
-        if (userInput.length === 0) {
-            $($tick).html(icon.empty)
-                    .addClass("text-muted")
-                    .removeClass("text-success text-warning");
-            $("#passwordConfirmTick").html(icon.empty)
-                                        .addClass("text-muted")
-                                        .removeClass("text-success text-warning");
+        if (verify.isEmpty(userInput)) {
+            verify.setStatus($tick, "neutral");
+            verify.setStatus($("#passwordConfirmTick"), "neutral");
+            isValid = false;
         } else {
-            // Length
-            if (userInput.length < 8) fails = true;
-            // Content
-            if (userInput.search(/\s/g) != -1) { fails = true; console.log("here"); };
-
-            if (fails) {
-                $($tick).html(icon.exed)
-                        .addClass("text-warning")
-                        .removeClass("text-success text-muted");
-                valid.password = false;
+            isValid = verify.passwordValid(userInput);
+    
+            if (isValid) {
+                verify.setStatus($tick, "valid");
             } else {
-                $($tick).html(icon.checked)
-                        .addClass("text-success")
-                        .removeClass("text-warning text-muted")
-                valid.password = true;                        
+                verify.setStatus($tick, "invalid");
             }
         }
-
+        conditionMet.password = isValid;
         setSubmitBtnState();
     });
-    $("#passwordConfirmTxt").keyup(function() {
+
+    $("#passwordConfirmTxt").keyup(function() {        
         const $tick = $("#passwordConfirmTick");
         const userInput = $(this).val();
-        let fails = false;
-
-        if ($("#passwordTxt").val().length === 0) {
-            $($tick).html(icon.empty)
-                    .addClass("text-muted")
-                    .removeClass("text-success text-warning");
+        let isValid = false;
+    
+        if (verify.isEmpty($("#passwordTxt").val())) {
+            verify.setStatus($tick, "neutral");
+                isValid = false;
         } else {
-            if (userInput !== $("#passwordTxt").val()) fails = true;
-
-            if (fails) {
-                $($tick).html(icon.exed)
-                        .addClass("text-warning")
-                        .removeClass("text-success text-muted");
-                valid.passwordConfirm = false;
+            isValid = verify.confirmPasswordValid(userInput, $("#passwordTxt").val());
+    
+            if (isValid) {
+                verify.setStatus($tick, "valid");
             } else {
-                $($tick).html(icon.checked)
-                        .addClass("text-success")
-                        .removeClass("text-warning text-muted");
-                valid.passwordConfirm = true;
+                verify.setStatus($tick, "invalid");
             }
         }
-
+        conditionMet.passwordConfirm = isValid;
         setSubmitBtnState();
     });
+
     $("#ageTxt").keyup(function() {
         const $tick = $("#ageTick");
         const userInput = $(this).val();
-        let fails = false;
+        let isValid = false;
 
-        if (userInput.length === 0) {
-            $($tick).html(icon.empty)
-                    .addClass("text-muted")
-                    .removeClass("text-success text-warning");
+        if (verify.isEmpty(userInput)) {
+            verify.setStatus($tick, "neutral");
+            isValid = false;
         } else {
-            if (parseInt(userInput) < 13) fails = true;
+            isValid = verify.confirmAgeValid(userInput)
 
-            if (fails) {
-                $($tick).html(icon.exed)
-                        .addClass("text-warning")
-                        .removeClass("text-success text-muted");
-                valid.age = false;
+            if (isValid) {
+                verify.setStatus($tick, "valid");
             } else {
-                $($tick).html(icon.checked)
-                        .addClass("text-success")
-                        .removeClass("text-warning text-muted");
-                valid.age = true;
+                verify.setStatus($tick, "invalid");
             }
         }
-
+        conditionMet.age = isValid;
         setSubmitBtnState();
     });
 
     function setSubmitBtnState() {
-        if (valid.username && valid.password && valid.passwordConfirm && valid.age) {
+        console.log(conditionMet.username, conditionMet.password, conditionMet.passwordConfirm, conditionMet.age);
+        if (conditionMet.username && conditionMet.password && conditionMet.passwordConfirm && conditionMet.age) {
             $("#submitBtn").prop("disabled", false);
-            console.log("here");
         } else {
             $("#submitBtn").prop("disabled", true);
         }
     }
-    async function verifyUniqueUsername(username) {
-        return fetch("./php_scripts/is_username_unique.php?username=" + username)
-            .then(result => result.json())
-            .then(message => message);
-    }
-
 });

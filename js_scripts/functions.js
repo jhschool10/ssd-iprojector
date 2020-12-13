@@ -344,3 +344,72 @@ function formatDate(datetime) {
 
     return outputStr;
 }
+
+let verify = {
+    icon: {
+        empty: "&#9744;",
+        checked: "&#9745;",
+        exed: "&#9746;",
+    },
+    timer: undefined,
+    isEmpty(str) {
+        return str.length ===0;
+    },
+    usernameValid(username) {
+        let isValid = true;
+
+        if (username.length < 5) isValid = false;
+
+        if (username.search(/[^a-z0-9]/g) != -1) isValid = false;
+
+        return isValid;
+    },
+    passwordValid: function(password) {
+        let isValid = true;
+
+        if (password.length < 8) isValid = false;
+        
+        if (password.search(/\s/g) != -1) { isValid = false; };
+
+        return isValid;
+    },
+    confirmPasswordValid: function(confirmPassword, password) {
+        let isValid = true;
+
+        if (confirmPassword !== password) isValid = false;
+
+        return isValid;
+    },
+    confirmAgeValid: function(age) {
+        let isValid = true;
+        
+        const ageParsed = parseInt(age);
+        if (isNaN(ageParsed) || ageParsed < 13) isValid = false;
+
+        return isValid;
+    },
+    setStatus: function($tickEle, status) {
+        switch (status) {
+            case "valid":
+                $($tickEle).html(verify.icon.checked)
+                        .addClass("text-success")
+                        .removeClass("text-warning text-muted");
+                break;
+            case "invalid":
+                $($tickEle).html(verify.icon.exed)
+                        .addClass("text-warning")
+                        .removeClass("text-success text-muted");
+                break;
+            case "neutral":
+                $($tickEle).html(verify.icon.empty)
+                    .addClass("text-muted")
+                    .removeClass("text-success text-warning");
+                break;
+        }
+    }
+}
+async function verifyUniqueUsername(username) {
+    return fetch("./php_scripts/is_username_unique.php?username=" + username)
+        .then(result => result.json())
+        .then(message => message);
+}
