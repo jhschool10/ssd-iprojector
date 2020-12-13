@@ -30,6 +30,8 @@
             $output["thought"] = $statement->fetch();
         }
         $output["success"] = $was_successful;
+    } else {
+        array_push($output, "You must be logged in.");
     }
 
     $outputJSON = json_encode($output);

@@ -11,16 +11,20 @@
     $output = [];
     $username = filter_input(INPUT_GET, "username", FILTER_SANITIZE_SPECIAL_CHARS);
 
-    if (userIsLoggedIn() and $username != null and $username != false) {
-        $was_successful = "";
+    if (userIsLoggedIn()) {
+        if ($username != null and $username != false) {
+            $was_successful = "";
 
-        $command = "SELECT id FROM users WHERE username = ?";
-        $statement = $dbh->prepare($command);
-        $was_successful = $statement->execute([$username]);
-        
-        if ($was_successful) {
-            $output["success"] = count($statement->fetchAll()) == 0;
+            $command = "SELECT id FROM users WHERE username = ?";
+            $statement = $dbh->prepare($command);
+            $was_successful = $statement->execute([$username]);
+            
+            if ($was_successful) {
+                $output["success"] = count($statement->fetchAll()) == 0;
+            }
         }
+    } else {
+        array_push($output, "You must be logged in.");
     }
 
     $outputJSON = json_encode($output);

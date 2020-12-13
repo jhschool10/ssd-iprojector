@@ -78,7 +78,7 @@
             $output["message"] = "No valid thought_id passed to script";
         }
     } else {
-        $output["message"] = "User not logged in.";
+        array_push($output, "You must be logged in.");
     }
 
     $outputJSON = json_encode($output);
