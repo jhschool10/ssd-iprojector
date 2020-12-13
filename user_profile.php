@@ -242,6 +242,9 @@
                                         <div class="d-flex justify-content-center col-2 w-100">
                                             <img src="./images/icon_avatar.png" id="avatar_img" class="rounded-circle bg-light">
                                         </div>
+                                        <div>
+                                            <p>(Not implemented :-( )</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="border-bottom p-4">
