@@ -403,7 +403,7 @@ function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
             $($row3).append($user);
 
             const $date = $("<small>")
-                            .html("born on <strong>" + formatDate(thought["date_created"]) + "</strong>")
+                            .html("created on <strong>" + formatDate(thought["date_created"]) + "</strong>")
                             .addClass("col-md text-sm mt-1");
             $($row3).append($date);
 
