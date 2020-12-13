@@ -176,8 +176,8 @@
             if (userIsLoggedIn()) {
                 echo "<script src='./libraries/jquery-3.5.1.min.js'></script>";
                 echo "<script src='./libraries/bootstrap.bundle.min.js'></script>";
-                echo "<script src='./js_scripts/log_in.js'></script>";
                 echo "<script src='./js_scripts/functions.js'></script>";
+                echo "<script src='./js_scripts/log_in.js'></script>";
             }
         ?>
     </body>
