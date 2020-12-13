@@ -178,28 +178,31 @@
                                         <input  type="email"
                                                 name="user_email"
                                                 class="col-9"
+                                                id="emailTxt"
                                                 placeholder="email@website.com">
                                     </div>
                                 </div>
                                 <div class="mb-1">
                                     <div class="form-row">
-                                        <span class="jh-tick col-2 h2 text-white text-center" id="firstNameTick">&#9744;</span>
+                                        <span class="jh-tick col-2 h2 text-white text-center" id="firstnameTick">&#9744;</span>
                                         <input  type="text"
                                                 name="user_firstname"
                                                 class="col-9"
                                                 pattern='[A-Z][a-z]+'
                                                 placeholder="First name"
+                                                id="firstnameTxt"
                                                 title='Letters only. Proper capitalization please.'>
                                     </div>
                                 </div>
                                 <div class="mb-1">
                                     <div class="form-row">
-                                        <span class="jh-tick col-2 h2 text-white text-center" id="lastNameTick">&#9744;</span>
+                                        <span class="jh-tick col-2 h2 text-white text-center" id="lastnameTick">&#9744;</span>
                                         <input  type="text"
                                                 name="user_lastname"
                                                 class="col-9"
                                                 pattern='[A-Z][a-z]+'
                                                 placeholder="Last name"
+                                                id="lastnameTxt"
                                                 title='Letters only. Proper capitalization please.'>
                                     </div>
                                 </div>
