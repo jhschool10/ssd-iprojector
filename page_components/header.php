@@ -13,7 +13,7 @@
                 echo "<li class='nav-item'>";
                     echo "<a href='./user_profile.php'";
                         echo "class='nav-link active text-info'>";
-                            echo "USER: " . get("username");
+                            echo get("username") . "'s Profile";
                     echo "</a>";
                 echo "</li>";
                 echo "<li class='nav-item'>";
