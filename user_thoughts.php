@@ -77,9 +77,8 @@
                     <?php
                         if (userIsLoggedIn()) {
                             echo "<div class='p-4 m-0 mt-4 h-100 w-100 bg-white border rounded shadow'>";
-                                echo "<h2 class='mb-4'><?= get('username'); ?>'s thoughts (<span id='num_thoughts'></span>)</h2>";
+                                echo "<h2 class='mb-4'>" . get('username') . "'s thoughts (<span id='num_thoughts'></span>)</h2>";
                                 echo "<div id='thoughts_container' class='d-flex flex-column'>";
-                                    
                                 echo "</div>";
                             echo "</div>";
                         }
