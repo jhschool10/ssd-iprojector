@@ -6,10 +6,12 @@
 
     include("./connect_to_db.php");
 
+    session_start();
+
     $output = [];
     $username = filter_input(INPUT_GET, "username", FILTER_SANITIZE_SPECIAL_CHARS);
 
-    if ($username != null and $username != false) {
+    if (userIsLoggedIn() and $username != null and $username != false) {
         $was_successful = "";
 
         $command = "SELECT id FROM users WHERE username = ?";
