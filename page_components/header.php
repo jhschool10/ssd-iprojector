@@ -7,7 +7,10 @@
         echo "<ul class='col-md nav w-100 justify-content-end align-items-baseline mt-4'>";
             if (userIsLoggedIn()) {
                 echo "<li class='nav-item'>";
-                    echo "<div class='nav-link disabled'>USER: " . get("username") . "</div>";
+                    echo "<a href='./user_profile.php'";
+                        echo "class='nav-link active text-info'>";
+                            echo "USER: " . get("username");
+                    echo "</a>";
                 echo "</li>";
                 echo "<li class='nav-item'>";
                     echo "<a href='./user_thoughts.php'";
