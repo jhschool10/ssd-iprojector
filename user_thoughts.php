@@ -36,6 +36,14 @@
                     box-shadow: 0.25em 0.25em 0.5em 0 black;
                     transform: translateX(0.5em) translateY(0.5em);
                 }
+            #loader {
+                display: inline-block;
+                animation: twirl linear infinite 4s;
+            }
+                @keyframes twirl {
+                    0% {transform: rotate(0deg)}
+                    100% {transform: rotate(360deg)}
+                }
         </style>
     </head>
     <body class='bg-light d-flex flex-column w-100 justify-content-center'>
@@ -77,7 +85,7 @@
                     <?php
                         if (userIsLoggedIn()) {
                             echo "<div class='p-4 m-0 mt-4 h-100 w-100 bg-white border rounded shadow'>";
-                                echo "<h2 class='mb-4'>" . get('username') . "'s thoughts (<span id='num_thoughts'></span>)</h2>";
+                                echo "<h2 class='mb-4'>" . get('username') . "'s thoughts (<span id='num_thoughts'><div id='loader'>&orarr;</div></span>)</h2>";
                                 echo "<div id='thoughts_container' class='d-flex flex-column'>";
                                 echo "</div>";
                             echo "</div>";

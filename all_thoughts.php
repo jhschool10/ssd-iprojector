@@ -17,6 +17,14 @@
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
         <link rel="stylesheet" href="./libraries/animate.min.css"/>
         <style>
+            #loader {
+                display: inline-block;
+                animation: twirl linear infinite 4s;
+            }
+                @keyframes twirl {
+                    0% {transform: rotate(0deg)}
+                    100% {transform: rotate(360deg)}
+                }
         </style>
     </head>
     <body class='bg-light d-flex flex-column w-100 justify-content-center'>
@@ -90,7 +98,7 @@
                     <?php
                         if (userIsLoggedIn()) {
                             echo "<div class='p-4 mb-4 h-100 w-100 bg-white border rounded shadow'>";
-                                echo "<h2 class='mb-4'>Thoughts (<span id='num_thoughts'></span>)</h2>";
+                                echo "<h2 class='mb-4'>Thoughts (<span id='num_thoughts'><div id='loader'>&orarr;</div></span>)</h2>";
                                 echo "<div id='thoughts_container'></div>";
                             echo "</div>";
                         }
