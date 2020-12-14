@@ -16,7 +16,6 @@
      */
 
     $output = [];
-    $user_id = get("user_id");
     $thought_id = filter_input(INPUT_GET, "thought_id", FILTER_SANITIZE_SPECIAL_CHARS);
 
     if ($thought_id != "random") {

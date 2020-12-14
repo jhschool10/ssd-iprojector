@@ -5,6 +5,7 @@
      */
 
     include("./connect_to_db.php");
+    include("./tools.php");
 
     session_start();
 
