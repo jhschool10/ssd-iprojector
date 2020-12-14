@@ -17,10 +17,11 @@ $("document").ready(function() {
     // Init
     $("#thoughts_container").html("");
 
-    getThoughts(querySettings.thought_set, querySettings.orderBy, querySettings.order)
-        .then(thoughts => {
-            for (const thought of thoughts) {
-                if (thought["user_id"] == this_user_id) {
+    thoughts.recompileList(querySettings.thought_set, querySettings.orderBy, querySettings.order)
+        .then(() => {
+
+            for (const thought of thoughts.getList()) {
+                if (thought.ownerID == this_user_id) {
                     $("#thoughts_container").append(createThoughtEle(thought, false, true));
                 } else {
                     $("#thoughts_container").append(createThoughtEle(thought, false, false));
@@ -28,7 +29,7 @@ $("document").ready(function() {
             }
         })
         .then(function() {
-            $("#num_thoughts").html(getNumThoughts());
+            $("#num_thoughts").html(thoughts.count());
         });
 
     // Listeners
@@ -70,19 +71,20 @@ $("document").ready(function() {
         querySettings.thought_set = "not_user";
     });
     $("#refresh_thought_list").click(function() {
-        getThoughts(querySettings.thought_set, querySettings.orderBy, querySettings.order)
-        .then(thoughts => {
-            $("#thoughts_container").html("");
-            for (const thought of thoughts) {
-                if (thought["user_id"] == this_user_id) {
-                    $("#thoughts_container").append(createThoughtEle(thought, false, true));
-                } else {
-                    $("#thoughts_container").append(createThoughtEle(thought, false, false));
+        thoughts.recompileList(querySettings.thought_set, querySettings.orderBy, querySettings.order)
+            .then(() => {
+                $("#thoughts_container").html("");
+                
+                for (const thought of thoughts.getList()) {
+                    if (thought.ownerID == this_user_id) {
+                        $("#thoughts_container").append(createThoughtEle(thought, false, true));
+                    } else {
+                        $("#thoughts_container").append(createThoughtEle(thought, false, false));
+                    }
                 }
-            }
-        })
-        .then(function() {
-            $("#num_thoughts").html(getNumThoughts());
-        });
+            })
+            .then(function() {
+                $("#num_thoughts").html(thoughts.count());
+            });
     });
 });

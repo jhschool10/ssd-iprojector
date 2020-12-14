@@ -3,105 +3,191 @@
  * Author: Joseph Haley
  */
 
-/**
- * Gets thought records from the database
- * @param {Enum - String} thoughtSet Which thoughts to get from the database (One of: all, user, not_user)
- * @param {Enum - String} orderBy The attribute to sort the list by (One of: date, huzzahs, username)
- * @param {Enum - String} order The order of the results (One of: asc, desc, random)
- * @return {Array} of objects containing thought attributes
- */
-async function getThoughts(thoughtSet, orderBy, order) {
-    let url = "./php_scripts/get_thoughts_from_db.php?";
-    
-    url += "thought_set=" + thoughtSet;
-    url += "&";
-    url += "order_by=" + orderBy;
-    url += "&";
-    url += "order=" + order;
-    url += "&";
+class Thought {
+    id;
+    ownerID;
+    ownerUsername;
+    ownerAge;
+    dateCreated;
+    text;
+    numHuzzahs;
 
-    return fetch(url)
-        .then(response => response.json())
-        .then(result => result);
-}
-/**
- * Gets one thought record from the database
- * @param {Int} thought_id The id of the thought
- * @return {Array} of one object containing thought attributes
- */
-async function getOneThought(thought_id) {
-    const url = "./php_scripts/get_one_thought_from_db.php?thought_id=" + thought_id;
-
-    return fetch(url)
-        .then(response => response.json())
-        .then(result => result);
-}
-/**
- * Records a thought to the database and returns that new thought
- * @param {String} text The text of the thought
- */
-function recordThought(text) {
-    recordThoughtToDB(text)
-        .then(result => {
-            console.log(result.success);
-            if (result.success) {
-                $("#success_message").html("");
-                $("#thoughtTxt").val("");
-                
-                $("#thoughts_container").prepend(createThoughtEle(result.thought, true, true));
-            } else {
-                $("#success_message").html("Oops, there was a problem and the thought wasn't registered. Did you really have that thought?");
-            }
-        })
-        .then(function() {
-            $("#num_thoughts").html(getNumThoughts());
-        });
-    
-    function recordThoughtToDB(text) {
-        return fetch("./php_scripts/record_thought_to_db.php?thought_text=" + text)
-            .then(response => response.json())
-            .then(result => result);
+    constructor(id, ownerID, ownerUsername, ownerAge, dateCreated, text, numHuzzahs) {
+        this.id = id;
+        this.ownerID = ownerID;
+        this.ownerUsername = ownerUsername;
+        this.ownerAge = ownerAge;
+        this.dateCreated = dateCreated;
+        this.text = text;
+        this.numHuzzahs = numHuzzahs;
     }
 }
 
-/**
- * Trades a user's thought with a random thought of another random user
- * For this function to work, the user must be the owner of the thought being traded
- * @param {Int} user_id The user_id of the current user who is trading a thought
- * @param {Int} thought_id The thought_id of the thought being traded
- * @return {Object {bool, Array[2]}} Object with two properties: "status" (bool) indicates whether the trade was successful; "message" returns an array of two objects containing the thought attributes of the two thoughts that were traded
- */
-async function tradeThought(user_id, thought_id) {
-    let url = "./php_scripts/trade_thought_in_db.php?";
-    url += "user_id=" + user_id; // the logged in user should be the current owner
-    url += "&thought_id=" + thought_id;
+const thoughts = {
+    list: [],
+    getList: function() {
+        return this.list;
+    },
+    count: function() {
+        return this.list.length;
+    },
+    /**
+     * Recompiles the list of thoughts with thoughts from the database
+     * @param {Enum - String} thoughtSet Which thoughts to get from the database (One of: all, user, not_user)
+     * @param {Enum - String} orderBy The attribute to sort the list by (One of: date, huzzahs, username)
+     * @param {Enum - String} order The order of the results (One of: asc, desc, random)
+     * @return {Array} of objects containing thought attributes
+     */
+    recompileList: function(thoughtSet, orderBy, order) {
+        this.list = [];
+        return this.db.getMultiple(thoughtSet, orderBy, order)
+                .then(thoughts => {
+                    for(const th of thoughts) {
+                        this.list.push(new Thought( th["thought_id"],
+                                                    th["current_owner"],
+                                                    th["username"],
+                                                    th["age"],
+                                                    th["date_created"],
+                                                    th["thought_text"],
+                                                    th["huzzahs"]))
+                    }
+                });
+    },
+    getRandom: function() {
+        return this.db.getOne("random");
+    },
+    getOne: function(thought_id) {
+        return this.db.getOne(thought_id);
+    },
+    recordOne: async function(text) {
+        return this.db.record(text)
+            .then(result => {
+                let value = undefined;
+                if (result.success) {
+                    const th = result.thought;
+                    value = new Thought(th["thought_id"],
+                                        th["current_owner"],
+                                        th["username"],
+                                        th["age"],
+                                        th["date_created"],
+                                        th["thought_text"],
+                                        th["huzzahs"])
+                } else {
+                    value = false;
+                }
+                return value;
+            })
+    },
+    trade: function(user_id, thought_id) {
+        return this.db.randomTrade(user_id, thought_id)
+            .then(result => result);
+    },
+    getHistory: function(thought_id) {
+        return this.db.getHistory(thought_id)
+            .then(result => result);
+    },
+    db: {
+        /**
+         * Gets one thought record from the database
+         * @param {Int} thought_id The id of the thought (or "random" to get a random thought)
+         * @return {Array} of one object containing thought attributes
+         */
+        getOne: async function(thought_id) {
+            const url = "./php_scripts/get_one_thought_from_db.php?thought_id=" + thought_id;
 
-    return fetch(url)
-        .then(result => result.json())
-        .then(status => status);
-}
+            return fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    const th = result[0];
+                    return new Thought( th["thought_id"],
+                                        th["current_owner"],
+                                        th["username"],
+                                        th["age"],
+                                        th["date_created"],
+                                        th["thought_text"],
+                                        th["huzzahs"])
+                });
+        },
+        /**
+         * Gets thought records from the database
+         * @param {Enum - String} thoughtSet Which thoughts to get from the database (One of: all, user, not_user)
+         * @param {Enum - String} orderBy The attribute to sort the list by (One of: date, huzzahs, username)
+         * @param {Enum - String} order The order of the results (One of: asc, desc, random)
+         * @return {Array} of objects containing thought attributes
+         */
+        getMultiple: function(thoughtSet, orderBy, order) {
+            let url = "./php_scripts/get_thoughts_from_db.php?";
+            
+            url += "thought_set=" + thoughtSet;
+            url += "&";
+            url += "order_by=" + orderBy;
+            url += "&";
+            url += "order=" + order;
+            url += "&";
+
+            return fetch(url)
+                .then(response => response.json())
+                .then(thoughts => thoughts);
+        },
+        /**
+         * Records a thought to the database and returns that new thought
+         * @param {String} text The text of the thought
+         */
+        record: async function(text) {
+            return fetch("./php_scripts/record_thought_to_db.php?thought_text=" + text)
+                .then(response => response.json())
+                .then(result => result);
+        },
+        /**
+         * Trades a user's thought with a random thought of another random user
+         * For this function to work, the user must be the owner of the thought being traded
+         * @param {Int} user_id The user_id of the current user who is trading a thought
+         * @param {Int} thought_id The thought_id of the thought being traded
+         * @return {Object {bool, Array[2]}} Object with two properties: "status" (bool) indicates whether the trade was successful; "message" returns an array of two objects containing the thought attributes of the two thoughts that were traded
+         */
+        randomTrade: function(user_id, thought_id) {
+            let url = "./php_scripts/trade_thought_in_db.php?";
+            url += "user_id=" + user_id; // the logged in user should be the current owner
+            url += "&thought_id=" + thought_id;
+
+            return fetch(url)
+                .then(result => result.json())
+                .then(status => status);
+        },
+        /**
+         * Gets an array of all trades a thought has been involved in
+         * @param {Int} thought_id The ID of the thought
+         * @return An array of Objects containing attributes regarding each trade the thought has been in
+         */
+        getHistory: async function(thought_id) {
+            return fetch("./php_scripts/get_thought_history_from_db.php?thought_id=" + thought_id)
+                .then(result => result.json())
+                .then(tradeRecords => tradeRecords);
+        }
+    },
+};
+
 /**
  * Gets a thought from the database, creates a jQuery "thought element" and uses that to replace another jQuery thought element
  * @param {jQuery object} $oldThought jQuery object containing one thought element
  * @param {*} newThoughtId The ID of the new thought which will replace the other thought
  */
-function replaceThought($oldThought, newThoughtId) {
-    getOneThought(newThoughtId)
+function replaceThoughtEle($oldThought, newThoughtId) {
+    thoughts.getOne(newThoughtId)
         .then(thought => {
             setTimeout(function() {
-                $($oldThought).replaceWith(createThoughtEle(thought[0], true, true));
+                $($oldThought).replaceWith(createThoughtEle(thought, true, true));
             }, 4500) // allow time for showProjectionVisual to complete its animation
         });
 };
 /**
- * Animates a thought trade
+ * Animates a thought trade between two thoughts
  * @param {Object} oldThought Object that contains thought attributes
  * @param {Object} newThought Object that contains thought attributes
  */
 async function showProjectionVisual(oldThought, newThought) {
-    const oldThoughtText = oldThought["thought_text"];
-    const otherUser = oldThought["new_owner_username"] + " (age " + oldThought["new_owner_age"] + ")";
-    const newThoughtText = newThought["thought_text"];
+    const otherUser = oldThought.ownerUsername + " (age " + oldThought.ownerAge + ")";
+    const newThoughtText = newThought.text;
 
     const $window = $("<div>")
                         .addClass("w-100 h-100 fixed-top d-flex justify-content-center align-items-center")
@@ -172,7 +258,7 @@ async function showProjectionVisual(oldThought, newThought) {
             }
             
             const $oldThoughtText = $("<div>")
-                                        .html("\"I " + oldThoughtText + "\"")
+                                        .html("\"I " + oldThought.text + "\"")
                                         .addClass("position-absolute bg-light text-center p-2 font-italic")
                                         .css("width", "48%")
                                         .css("top", textPositionUser.top)
@@ -185,7 +271,7 @@ async function showProjectionVisual(oldThought, newThought) {
             $($visual).append($oldThoughtText);
 
             const $newThoughtText = $("<div>")
-                                        .html("\"I " + newThoughtText + "\"")
+                                        .html("\"I " + newThought.text + "\"")
                                         .addClass("position-absolute bg-light text-center p-2 font-italic")
                                         .css("width", "48%")
                                         .css("top", textPositionOtherUser.top)
@@ -209,17 +295,6 @@ async function showProjectionVisual(oldThought, newThought) {
                 .remove()
         }, 500);
     }, 4500);
-}
-
-/**
- * Gets an array of all trades a thought has been involved in
- * @param {Int} thought_id The ID of the thought
- * @return An array of Objects containing attributes regarding each trade the thought has been in
- */
-async function getThoughtHistory(thought_id) {
-    return fetch("./php_scripts/get_thought_history_from_db.php?thought_id=" + thought_id)
-        .then(result => result.json())
-        .then(tradeRecords => tradeRecords);
 }
 /**
  * Creates a jQuery object containing one element listing all trades a thought has been in
@@ -255,20 +330,20 @@ function createThoughtHistoryEle(tradeRecords) {
 
 /**
  * Creates a "thought element" component
- * @param {Object} thought An Object containing various attributes relating to a thought
- * @param {*} isAnimated Whether the element will be animated when added to the DOM
- * @param {*} isUserThought Whether the thought being created is owned by the current user
+ * @param {Object} thought a Thought object
+ * @param {Boolean} isAnimated Whether the element will be animated when added to the DOM
+ * @param {Boolean} isUserThought Whether the thought being created is owned by the current user
  * @return A jQuery Object containing one "thought element"
  */
 function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
-    const $thoughtContainer = $("<div>")
-                        .attr("data-id", thought["thought_id"]) // for finding this particular thought
+    const $container = $("<div>")
+                        .attr("data-id", thought.id) // for finding this particular thought
                         .addClass("thought-container mb-3 shadow border rounded");
 
     if (isAnimated) { // Will animate the drawing of the thought to the screen (for when new thoughts are added by a user)
         // Timeout is necessary re: https://stackoverflow.com/questions/24148403/trigger-css-transition-on-appended-element
         setTimeout(function() {
-            $($thoughtContainer)
+            $($container)
                 .addClass("animate__animated animate__rubberBand");
         }, 50);
     }
@@ -281,7 +356,7 @@ function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
                         .mouseleave(function() {
                             $(this).css("background-color", "white")
                         });
-        $($thoughtContainer).append($row1);
+        $($container).append($row1);
 
             const $textContainer = $("<div>")
                                     .addClass("d-flex align-self-end w-100 justify-content-left")
@@ -289,8 +364,7 @@ function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
                                     .on("click", function() {
                                         $targetRow = $row2;
                                         if ($targetRow.attr("data-isFilled") === "false") {
-                                            const thought_id = thought["thought_id"];
-                                            getThoughtHistory(thought_id)
+                                            thoughts.db.getHistory(thought.id)
                                                 .then(projectionRecords => {
                                                     $($targetRow).append(createThoughtHistoryEle(projectionRecords));
                                                 });
@@ -316,19 +390,19 @@ function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
                     
 
                 const $text = $("<p>")
-                                .html(thought["thought_text"])
+                                .html(thought.text)
                                 .addClass("font-italic align-self-center m-0 p-0");
                 $($textContainer).append($text);
         
         const $row2 = $("<div>")
                         .addClass("w-100 h-0")
                         .attr("data-isFilled", "false");
-        $($thoughtContainer).append($row2);
+        $($container).append($row2);
 
 
         const $row3 = $("<div>")
                         .addClass("row button justify-content-between align-items-center ml-1 mr-1 pb-3 pt-3");
-        $($thoughtContainer).append($row3);
+        $($container).append($row3);
 
             const $buttons = $("<div>")
                                 .addClass("col-md d-flex");
@@ -339,21 +413,36 @@ function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
                                             .html("&#9755; Project")
                                             .addClass("btn btn-success btn-sm mr-2")
                                             .on("click", function() {
-                                                const loggedInUser = thought["current_owner"];
-                                                tradeThought(loggedInUser, thought["thought_id"])
+                                                const loggedInUser = thought.ownerID;
+                                                thoughts.trade(loggedInUser, thought.id)
                                                     .then(function(status) {
                                                         if (status.success) {
-                                                            const thoughts = status.message;
-                                                            let userNewThought, userOldThought;
-                                                            if (thoughts[0]["new_owner_id"] == loggedInUser) {
-                                                                userNewThought = thoughts[0];
-                                                                userOldThought = thoughts[1];
+                                                            const ths = status.message;
+                                                            const th1 = new Thought(ths[0]["thought_id"],
+                                                                                    ths[0]["new_owner"],
+                                                                                    ths[0]["username"],
+                                                                                    ths[0]["age"],
+                                                                                    0,
+                                                                                    ths[0]["thought_text"],
+                                                                                    0);
+                                                            const th2 = new Thought(ths[1]["thought_id"],
+                                                                                    ths[1]["new_owner"],
+                                                                                    ths[1]["username"],
+                                                                                    ths[1]["age"],
+                                                                                    0,
+                                                                                    ths[1]["thought_text"],
+                                                                                    0);
+                                                            let newThought, oldThought;
+                                                            console.log(th1.ownerID, loggedInUser);
+                                                            if (th1.ownerID === loggedInUser) {
+                                                                newThought = th1;
+                                                                oldThought = th2;
                                                             } else {
-                                                                userNewThought = thoughts[1];
-                                                                userOldThought = thoughts[0];
+                                                                newThought = th2;
+                                                                oldThought = th1;
                                                             }
-                                                            showProjectionVisual(userOldThought, userNewThought)
-                                                                .then(() => { replaceThought($thoughtContainer, userNewThought["thought_id"]) });
+                                                            showProjectionVisual(oldThought, newThought)
+                                                                .then(() => { replaceThoughtEle($container, newThought.id) });
                                                         }
                                                     })
                                             });
@@ -363,13 +452,12 @@ function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
                 const $huzzahBtn = $("<button>")
                                     .html("<img src='./images/huzzah.png' style='height: 20px; width: 20px;'> Huzzah!")
                                     .attr("type", "button")
-                                    .attr("data-id", thought["thought_id"])
+                                    .attr("data-id", thought.id)
                                     .attr("title", "It's not like anyone's gonna find out...")
                                     .addClass("CLICKABLE-huzzah btn btn-warning text-white btn-sm")
                                     .on("click", function() {
                                         $(this).prop("disabled", true);
-                                        const thoughtID = thought["thought_id"];
-                                        fetch("./php_scripts/huzzah.php?thought_id=" + thoughtID)
+                                        fetch("./php_scripts/huzzah.php?thought_id=" + thought.id)
                                             .then(response => response.json())
                                             .then(status => {
                                                 if (status.success) {
@@ -388,33 +476,26 @@ function createThoughtEle(thought, isAnimated = false, isUserThought = false) {
             const $huzzahNum = $("<div>")
                                 .addClass("col-md mt-1")
                                 .append($("<span>")
-                                            .html(thought["huzzahs"]))
+                                            .html(thought.numHuzzahs))
                                 .append($("<img>")
                                             .attr("src", "./images/huzzah.png")
-                                            .attr("title", thought["huzzahs"] + " huzzahs so far")
+                                            .attr("title", thought.numHuzzahs + " huzzahs so far")
                                             .addClass("bg-warning rounded-circle ml-2 p-1")
                                             .css("width", "20px")
                                             .css("height", "20px"));
             $($row3).append($huzzahNum);
 
             const $user = $("<small>")
-                            .html("now in the head of <strong>" + thought["username"] + "</strong> (age " + thought["age"] + ")")
+                            .html("now in the head of <strong>" + thought.ownerUsername + "</strong> (age " + thought.ownerAge + ")")
                             .addClass("col-md text-sm mr-2 mt-1");
             $($row3).append($user);
 
             const $date = $("<small>")
-                            .html("created on <strong>" + formatDate(thought["date_created"]) + "</strong>")
+                            .html("created on <strong>" + formatDate(thought.dateCreated) + "</strong>")
                             .addClass("col-md text-sm mt-1");
             $($row3).append($date);
 
-    return $thoughtContainer;
-}
-/**
- * Gets the number of thoughts in a thought container
- * @return The number of thoughts
- */
-function getNumThoughts() {
-    return $("#thoughts_container").children().length;
+    return $container;
 }
 /**
  * Formats a datetime into a nicer format
@@ -435,6 +516,7 @@ function formatDate(datetime) {
 
     return outputStr;
 }
+
 /**
  * An object containing everything needed to verify various user inputs
  */

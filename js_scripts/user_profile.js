@@ -105,7 +105,6 @@ $("document").ready(function () {
 
             if (isValid) {
                 verify.setStatus($tick, "valid");
-                console.log("isvalid");
             } else {
                 verify.setStatus($tick, "invalid");
             }
@@ -127,7 +126,6 @@ $("document").ready(function () {
 
             if (isValid) {
                 verify.setStatus($tick, "valid");
-                console.log("isvalid");
             } else {
                 verify.setStatus($tick, "invalid");
             }
@@ -149,7 +147,6 @@ $("document").ready(function () {
 
             if (isValid) {
                 verify.setStatus($tick, "valid");
-                console.log("isvalid");
             } else {
                 verify.setStatus($tick, "invalid");
             }
@@ -171,7 +168,6 @@ $("document").ready(function () {
                 if (property === "n/a") numNA++;
             }
 
-            console.log(conditionMet);
             if (numTrue > 0 && numFalse === 0) {
                 $("#submitBtn").prop("disabled", false);
             } else {

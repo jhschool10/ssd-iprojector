@@ -1,4 +1,7 @@
-$("document").ready(async function() {
-    const thought = await getOneThought("random");
-    $("#random_thought").append(createThoughtEle(thought[0], true));
+$("document").ready(function() {
+    thoughts.getRandom()
+        .then(thought => {
+            console.log(thought);
+            $("#random_thought").append(createThoughtEle(thought, true));
+        })
 });

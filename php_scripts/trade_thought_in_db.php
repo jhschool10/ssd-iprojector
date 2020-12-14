@@ -45,9 +45,9 @@
                             SELECT  date as trade_date,
                                     thought_id,
                                     t.thought_text,
-                                    new_owner as new_owner_id,
-                                    username as new_owner_username,
-                                    age as new_owner_age
+                                    new_owner,
+                                    username,
+                                    age
                             FROM projection_log p
                             INNER JOIN users u
                                 ON p.new_owner = u.id

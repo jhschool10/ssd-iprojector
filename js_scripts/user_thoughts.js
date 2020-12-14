@@ -9,14 +9,14 @@ $("document").ready(function() {
     // Init
     $("#thoughts_container").html("");
 
-    getThoughts("user", "date", "desc")
-        .then(thoughts => {
-            for (const thought of thoughts) {
+    thoughts.recompileList("user", "date", "desc")
+        .then(() => {
+            for (const thought of thoughts.getList()) {
                 $("#thoughts_container").append(createThoughtEle(thought, false, true));
             }
         })
         .then(function() {
-            $("#num_thoughts").html(getNumThoughts());
+            $("#num_thoughts").html(thoughts.count());
         });
 
     // Listeners
@@ -25,6 +25,19 @@ $("document").ready(function() {
 
         const thoughtText = $("#thoughtTxt").val();
 
-        recordThought(thoughtText);
+        thoughts.recordOne(thoughtText)
+            .then(thought => {
+                if (thought === false) {
+                    $("#success_message").html("Oops, there was a problem and the thought wasn't registered. Did you really have that thought?");
+                } else {
+                    $("#success_message").html("");
+                    $("#thoughtTxt").val("");
+                    
+                    $("#thoughts_container").prepend(createThoughtEle(thought, true, true));
+                }
+            })
+            .then(function() {
+                $("#num_thoughts").html($("#thoughts_container").children().length);
+            });
     });
 });
