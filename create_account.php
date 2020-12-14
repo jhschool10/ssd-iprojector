@@ -64,7 +64,7 @@
 ?><!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Create account? Create account!</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./libraries/bootstrap.min.css"/>
@@ -217,7 +217,7 @@
                                                 name="user_age"
                                                 class="col-9"
                                                 id="ageTxt"
-                                                placeholder="Age"
+                                                placeholder="Age (required)"
                                                 required>
                                     </div>
                                     <div class="form-row">

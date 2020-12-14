@@ -261,7 +261,7 @@
                                                     pattern='\S{8,}'
                                                     title='(At least 8 characters; no whitespace)'
                                                     id="passwordTxt"
-                                                    placeholder="New Password (required)">
+                                                    placeholder="New Password">
                                         </div>
                                         <div class="form-row">
                                             <span class="jh-tick col-2 h2 text-white text-center">&#9744;</span>
@@ -279,7 +279,7 @@
                                                     pattern='\S{8,}'
                                                     title='(8 or more characters; alphanumeric only)'
                                                     id="passwordConfirmTxt"
-                                                    placeholder="Confirm Password (required)">
+                                                    placeholder="Confirm Password">
                                         </div>
                                     </div>
                                 </div>
