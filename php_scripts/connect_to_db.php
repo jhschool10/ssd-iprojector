@@ -8,10 +8,10 @@
         No other person's work has been used without due acknowledgment and I have not made my work
         available to anyone else.
     */
-    
+
     try {
-        $dbh = new PDO("mysql:host=localhost;dbname=000820709",
-            "root", "");
+        $dbh = new PDO("mysql:host=localhost;dbname=josephha_iprojector",
+            "josephha_iprojector_admin", "SuperSecretPassword");
     } catch (Exception $e) {
         die("Error: Couldn't connect. {$e->getMessage()}");
     }
