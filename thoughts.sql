@@ -78,7 +78,7 @@ INSERT INTO `thoughts` (`id`, `current_owner`, `date_created`, `thought_text`, `
 (36, 1, '2020-12-01 18:30:28', 'ski about once every 15 years', 6),
 (37, 7, '2020-12-01 18:30:28', 'eat yellow snow all the time', 11),
 (38, 7, '2020-12-01 18:30:28', 'a chicken', 0),
-(39, 2, '2020-12-01 18:30:28', 'once farted in my own food', 0),
+(39, 2, '2020-12-01 18:30:28', 'once refused to eat my dinner', 0),
 (40, 8, '2020-12-01 18:30:28', 'just turned on the fan in my office', 0),
 (41, 2, '2020-12-01 18:30:28', 'open windows to smell the breeze', 1),
 (42, 2, '2020-12-01 18:30:28', 'am not a fan of the Buffalo Sabres', 8),
